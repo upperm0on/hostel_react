@@ -1,0 +1,74 @@
+.sign_up {
+  margin: 30px;
+  padding: 30px;
+}
+
+.sign_up .form-title {
+  font-size: 1.5rem;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sign_up .sign_up-item {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid var(--color-dark-text);
+  width: 300px;
+  padding: 10px 5px;
+}
+
+.sign_up .sign_up-item label .label_container {
+  height: 35px;
+  width: 35px;
+}
+
+.sign_up .sign_up-item label .label_container img {
+  height: 100%;
+  width: 100%;
+}
+
+.sign_up .sign_up-item input {
+  padding: 5px 15px;
+  font-size: 1rem;
+  font-family: var(--font-body-one);
+  font-weight: 400;
+  background: transparent;
+  border: none;
+}
+
+.sign_up .sign_up-item input:focus {
+  outline: none;
+}
+
+.sign_up .sign_up-item .show_hide {
+    cursor: pointer;
+    height: 22.5px;
+    width: 22.5px;
+}
+
+.sign_up .sign_up-item .show_hide img {
+    height: 100%;
+    width: 100%;
+}
+
+.sign_up .form_submit {
+    font-size: 1rem;
+    padding: 10px 15px;
+    font-family: var(--font-body-two);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: white;
+    border: none;
+    background: var(--color-accent-green);
+    cursor: pointer;
+}
+
+.login_option {
+    font-size: 1rem;
+    font-family: var(--font-body);
+    margin: 30px;
+}

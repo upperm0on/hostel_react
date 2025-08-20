@@ -1,0 +1,24 @@
+
+import './App.css'
+import Landingpage from './pages/Landingpage'
+import Hostels from './pages/Hostels'
+import SignUp from './pages/SignUp'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+
+import { Route, Routes } from 'react-router-dom'
+
+function App() {
+
+  return (
+      <Routes>
+        <Route path='/' element={<Landingpage />} />
+        <Route path='/hostels' element={<Hostels />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+      </Routes>
+  )
+}
+
+export default App

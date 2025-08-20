@@ -1,0 +1,50 @@
+.hostel_card {
+    margin: 10px;
+    min-width: 250px;
+    box-shadow: 0px 0px 22px -10px var(--color-dark-text);
+    border-radius: 15px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    transition: transform 300ms ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.hostel_card:hover {
+    transform: scale(1.1);
+    transition: 300ms ease;
+}
+
+.hostel_card .card-img-container {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hostel_card .card-img-container img {
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hostel_card .hostel_details {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 10px;
+    gap: 5px;
+}
+
+.hostel_card .hostel_details .details1,
+.hostel_card .hostel_details .details2 {
+    list-style: none;
+    font-family: var(--font-body);
+    font-weight: 350;
+}
+
+.hostel_card .hostel_details .details2 {
+    font-weight: 500;
+}
+

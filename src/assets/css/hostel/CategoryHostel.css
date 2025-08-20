@@ -1,0 +1,18 @@
+.category_list {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 30px;
+    margin: 20px auto;
+    width: 90vw;
+    overflow-x: scroll;
+}
+
+.category_list .category_name {
+    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    font-weight: 500;
+    align-self: center;
+    margin: 20px;
+}
