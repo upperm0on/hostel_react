@@ -18,7 +18,7 @@ function DetailPopup({ hostel, open, onClose }) {
     : JSON.parse(hostel.room_details || "[]");
 
   const additional_details = JSON.parse(hostel.additional_details);
-
+  
   return (
     <div className="detail_popup_backdrop" onClick={onClose}>
       <div className="detail_popup" onClick={(e) => e.stopPropagation()}>

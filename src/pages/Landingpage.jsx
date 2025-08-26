@@ -25,7 +25,9 @@ function Landingpage() {
     
   return (
     <>
+      <NavBar />
       <CardContainer />
+      <Footer />
     </>
   );
 }

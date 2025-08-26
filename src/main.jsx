@@ -4,14 +4,9 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 
-import NavBar from './components/NavBar'
-import Footer from './components/Footer'
-
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <NavBar />
     <App />
-    <Footer />
   </BrowserRouter>,
 )

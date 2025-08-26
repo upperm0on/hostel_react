@@ -7,10 +7,13 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 
 import { Route, Routes } from 'react-router-dom'
+import NavBar from './components/NavBar'
+import Footer from './components/Footer'
 
 function App() {
 
   return (
+    <>
       <Routes>
         <Route path='/' element={<Landingpage />} />
         <Route path='/hostels' element={<Hostels />} />
@@ -18,6 +21,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
+    </>
   )
 }
 

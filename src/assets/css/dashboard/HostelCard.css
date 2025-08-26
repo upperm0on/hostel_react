@@ -1,0 +1,93 @@
+.dashboard_card {
+    margin: 30px;
+    /* outline: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(20px);
+    box-shadow: 0px 0px 15px -10px var(--color-dark-text);
+    border-radius: 15px;
+}        
+
+.dashboard_card .image {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.dashboard_card .image img {
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.dashboard_card .image .hostel_location {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: var(--color-bg-light);
+    background: linear-gradient(180deg, transparent, black);
+    padding: 20px;
+    font-family: var(--font-body-two);
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+}
+
+.dashboard_card .hostel_details,
+.dashboard_card .hostel_details .room_details, 
+.dashboard_card .hostel_details .additional_details{
+    margin: 30px;
+}
+
+.dashboard_card .hostel_details .details_hostel {
+    list-style: none;
+}
+
+.dashboard_card .hostel_details .details_hostel .details_hostel_item {
+    font-size: 1rem;
+    margin: 5px;
+}
+
+.dashboard_card .hostel_details .details_hostel .details_hostel_item strong {
+    font-family: var(--font-body-one);
+    font-size: 1rem;
+    letter-spacing: .5px;
+    font-weight: 550;
+    color: var(--color-muted-text);
+}
+
+.dashboard_card .hostel_details .details_hostel .details_hostel_item  {
+    font-family: var(--font-body-two);
+    font-size: 1.175rem;
+    font-weight: 500;
+}
+
+.dashboard_card .hostel_details .additional_details h4 {
+    font-size: 1.3rem;
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    letter-spacing: 1px;
+}
+
+.dashboard_card .hostel_details .additional_details ul {
+    list-style: disc;
+}
+
+.dashboard_card .hostel_details .additional_details ul li {
+    font-family: var(--font-body-two);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin: 5px;
+}
+
+.dashboard_card .hostel_details .room_details h4 {
+    font-size: 1.15rem;
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    letter-spacing: 1px;
+}
+
+.grided-content {
+    display: flex;
+    flex-direction: row;
+}

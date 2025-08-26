@@ -5,75 +5,49 @@ function DetailRoom({ room_details, hostel }) {
 
   const genderKeys = Object.keys(room_details.gender);
 
-  const base_image_url = 'http://localhost:8080/media/room_images'
-  
-//   const handler = window.PaystackPop.setup({
-//     key: publicKey, // public key only
-//     email: "customer@example.com",
-//     amount: 5000, // in kobo (50.00 GHS)
-//     currency: "GHS",
-//     ref: `ref-${Date.now()}`, // unique transaction reference
-//     callback: function(response) {
-//       // Payment was successful
-//       console.log("Payment success", response);
-//       // Send the reference to your backend for verification
-//       fetch("/api/verify-payment/", {
-//         method: "POST",
-//         headers: {"Content-Type": "application/json"},
-//         body: JSON.stringify({reference: response.reference})
-//       });
-//     },
-//     onClose: function() {
-//       console.log("Payment closed");
-//     }
-//   });
+  const base_image_url = "http://localhost:8080/media/room_images";
 
-//   handler.openIframe();
-// };
+  const token = localStorage.getItem("token");
+  const handlePayment = async () => {
+    try {
+      // Initiate payment on backend
+      const res = await fetch("http://localhost:8080/hq/api/payments/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({ 
+          room_id: room_details.id,
+          room_number: room_details.number_in_room,
+        }),
+      });
+      const backendData = await res.json();
 
-const token = localStorage.getItem('token');
+      // Initialize Paystack transaction
+      const paystackRes = await fetch("http://localhost:8080/hq/api/payments/verify/", {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`, // Replace with your actual secret key
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: backendData.email,
+          amount: room_details.price * 100, // Ensure this is in kobo (multiply by 100 if needed)
+          callback_url: "http://127.0.0.1:8000/dashboard/",
+          hostel_id: hostel.id,
+          room_number: room_details.number_in_room,
+        }),
+      });
 
-    const handlePayment = async () => {
-  try {
-    // Call your backend to initiate payment
-    const res = await fetch(`http://localhost:8080/hq/api/payments/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", 'Authorization': `Token ${token} ` },
-      body: JSON.stringify({ room_id: room_details.id })
-    });
-    const data = await res.json();
-    
-    console.log(data)
+      const response = await paystackRes.json();
+      window.open(response.authorization_url, "_blank");
 
-    const handler = window.PaystackPop.setup({
-      key: data.public_key,
-      email: data.email,
-      amount: parseFloat(room_details['price']) * 100,
-      currency: "GHS",
-      ref: `ref-${Date.now()}`,
-      callback: async (response) => {
-        const reference = `${Date.now()}`;
-        // Send reference to backend for verification
-        await fetch("/api/verify-payment/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reference: `${reference}`, room_id: room_details.id })
-        });
-        alert("Payment verified successfully!");
-      },
-      onClose: function() {
-        console.log("Payment closed");
-      }
-    });
-
-    handler.openIframe();
-  } catch (err) {
-    console.error(err);
-    alert("Payment failed. Try again.");
-  }
-};
-
-
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Try again.");
+    }
+  };
 
   return (
     <div className="room-container">
@@ -95,8 +69,9 @@ const token = localStorage.getItem('token');
             ? "Mixed"
             : genderKeys[0].charAt(0).toUpperCase() + genderKeys[0].slice(1)}
         </li>
-        <button type="button" className="booking_btn" onClick={handlePayment}>Book Room</button>
-
+        <button type="button" className="booking_btn" onClick={handlePayment}>
+          Book Room
+        </button>
       </ul>
       <ul className="amenities">
         <h3 className="title">Room Amenities</h3>
