@@ -1,12 +1,12 @@
 import '../../assets/css/landingpage/RoomCard.css';
 
-function RoomCards() {
+function RoomCards({background_image, number_in_room}) {
     return(
         <div className="card">
-            <div class="card-background">
-                <img src="" alt="card-background" />
+            <div className="card-background">
+                <img src={background_image} alt="card-background" />
             </div>
-            <p className="card-text">2 in a room</p>
+            <p className="card-text">{number_in_room} in a room</p>
             <button className="card-button">
                 See More
             </button>

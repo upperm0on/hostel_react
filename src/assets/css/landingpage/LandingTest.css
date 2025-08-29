@@ -1,0 +1,15 @@
+.landing_text p {
+    margin: 30px;
+    font-size: 2.5rem;
+    font-family: var(--font-body-one);
+    justify-self: center;
+    font-weight: 500;
+    color: var(--color-muted-text);
+}
+
+.landing_text p span {
+    font-weight: 800;
+    color: var(--color-primary);
+    font-size: 3rem;
+    letter-spacing: -2px;
+}

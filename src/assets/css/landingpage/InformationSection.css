@@ -1,0 +1,35 @@
+.information_section {
+  justify-self: center;
+  margin: 30px;
+}
+
+.information_section .information_information {
+  align-self: center;
+  /* outline: 1px solid black; */
+  text-align: center;
+  margin: 30px;
+}
+
+.information_section .information_information .information_section_title p {
+  margin: 30px;
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--color-dark-text);
+  letter-spacing: 1px;
+}
+
+.information_section .information_information .information_section_subtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.carousel_section {
+  width: 100vw;
+  background: var(--color-dark-text);
+  padding-bottom: 30px;
+}
+
+

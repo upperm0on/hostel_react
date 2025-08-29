@@ -1,0 +1,82 @@
+.carousel_card {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel_card .carousel_title {
+    margin: 20px auto;
+}
+
+.carousel_card .carousel_title .title {
+    font-size: 1rem;
+    font-family: var(--font-body-two);
+    padding: 10px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent-green));
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--color-bg-light);
+}
+
+.carousel_card .flexed_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 3rem;
+}
+
+
+.carousel_card .flexed_content .before {
+    /* box-shadow: 0 0 20px -10px var(--color-muted-text); */
+    overflow: hidden;
+}
+
+.carousel_card .flexed_content .before .before_details {
+    height: 100px;
+    width: 100px;
+    margin: 30px auto;
+}
+
+.carousel-card .flexed_content .before:nth-child(1) .before:nth-child(1) .before_icon {
+    position: relative;
+}
+
+.carousel_card .flexed_content .before:nth-child(1) .before_details .before_icon img{
+    height: 175%;
+    width: 175%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -20px;
+}
+
+.carousel-card .flexed_content .before .before_details .before_icon {
+    margin: 30px;
+    outline: 1px solid black;
+    background: red;
+}
+
+.carousel_card .flexed_content .before .before_details .before_icon img{
+    height: 100%;
+    width: 100%;
+}
+
+.carousel_card .flexed_content .before .before_image_container {
+    height: 300px;
+    width: 500px;
+}
+
+.carousel_card .flexed_content .before .before_image_container img {
+    height: 100%;
+    width: 100%;
+}
+
+.carousel_card .subtitle {
+    text-align: center;
+    font-size: 2rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-muted-text);
+    text-transform: capitalize;
+}

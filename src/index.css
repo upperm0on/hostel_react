@@ -9,6 +9,7 @@
   --color-dark-text: #111827;
   --color-muted-text: #6B7280;
   --color-accent-green: #10B981;
+  --color-danger-red: #f03a3a;
 
   /* Fonts */
   --font-heading: 'Poppins', sans-serif;
@@ -70,8 +71,8 @@ body {
   font-style: normal;
 }
 
-* {
-  font-size: .95rem;
+html {
+  font-size: 14px;
 }
 
 *,
@@ -80,4 +81,8 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
 }

@@ -41,7 +41,7 @@ nav .nav-links .nav-links-item .nav-link {
 }
 
 nav .nav-links .nav-links-item .nav-link .icon-container {
-    height: 50px;
+    height: 30px;
     width: 50px;
     position: relative;
     overflow: hidden;
@@ -49,9 +49,9 @@ nav .nav-links .nav-links-item .nav-link .icon-container {
 
 nav .nav-links .nav-links-item .nav-link .icon-container img {
     position: absolute;
-    top: 50%;
+    top: 0%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     width: 100%;
 }
 

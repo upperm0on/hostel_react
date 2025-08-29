@@ -10,6 +10,8 @@ import { Route, Routes } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 
+import DetailedSearch from './pages/DetailedSearch'
+
 function App() {
 
   return (
@@ -20,6 +22,7 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/detailed_search' element={<DetailedSearch />} />
       </Routes>
     </>
   )
