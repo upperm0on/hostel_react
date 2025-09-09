@@ -1,0 +1,40 @@
+.landing_text p {
+    margin: 30px;
+    font-size: 2.5rem;
+    font-family: var(--font-body-one);
+    justify-self: center;
+    font-weight: 500;
+    color: var(--color-muted-text);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.landing_text p span {
+    font-weight: 800;
+    color: var(--color-primary);
+    font-size: 3rem;
+    letter-spacing: -2px;
+}
+
+/* Responsive landing text */
+@media (max-width: 768px) {
+    .landing_text p {
+        font-size: 2rem;
+        margin: 20px;
+    }
+    
+    .landing_text p span {
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .landing_text p {
+        font-size: 1.5rem;
+        margin: 15px;
+    }
+    
+    .landing_text p span {
+        font-size: 1.8rem;
+    }
+}

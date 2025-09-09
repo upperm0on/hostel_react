@@ -34,7 +34,7 @@ function DetailRoom({ room_details, hostel }) {
         body: JSON.stringify({
           email: backendData.email,
           amount: room_details.price * 100, // Ensure this is in kobo (multiply by 100 if needed)
-          callback_url: "http://127.0.0.1:8000/dashboard/",
+          callback_url: "/dashboard/",
           hostel_id: hostel.id,
           room_number: room_details.number_in_room,
         }),
