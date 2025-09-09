@@ -8,7 +8,7 @@ function Landingpage() {
   const token = localStorage.getItem('token');
   
   async function get_username() {
-      const res = await fetch("http://localhost:8080/hq/api/landing_page/", {
+      const res = await fetch("/hq/api/landing_page/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

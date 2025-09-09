@@ -3,4 +3,23 @@
     flex-direction: row;
     justify-self: center;
     margin: 50px;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Responsive card container */
+@media (max-width: 768px) {
+    .card-container {
+        margin: 30px;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        margin: 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
 }

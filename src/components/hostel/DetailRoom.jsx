@@ -5,13 +5,13 @@ function DetailRoom({ room_details, hostel }) {
 
   const genderKeys = Object.keys(room_details.gender);
 
-  const base_image_url = "http://localhost:8080/media/room_images";
+  const base_image_url = "/media/room_images";
 
   const token = localStorage.getItem("token");
   const handlePayment = async () => {
     try {
       // Initiate payment on backend
-      const res = await fetch("http://localhost:8080/hq/api/payments/", {
+      const res = await fetch("/hq/api/payments/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +25,7 @@ function DetailRoom({ room_details, hostel }) {
       const backendData = await res.json();
 
       // Initialize Paystack transaction
-      const paystackRes = await fetch("http://localhost:8080/hq/api/payments/verify/", {
+      const paystackRes = await fetch("/hq/api/payments/verify/", {
         method: "POST",
         headers: {
           Authorization: `Token ${token}`, // Replace with your actual secret key

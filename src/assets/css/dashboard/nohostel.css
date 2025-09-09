@@ -2,6 +2,22 @@
     justify-self: center;
     margin: 80px;
     margin-top: 30px;
+    padding: 20px;
+}
+
+/* Responsive information container */
+@media (max-width: 768px) {
+    .information_container {
+        margin: 40px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .information_container {
+        margin: 20px;
+        padding: 10px;
+    }
 }
 
 .information_container .information .message {
@@ -12,6 +28,19 @@
     color: var(--color-muted-text);
 }
 
+/* Responsive message text */
+@media (max-width: 768px) {
+    .information_container .information .message {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .information_container .information .message {
+        font-size: 2rem;
+    }
+}
+
 .information_container .information {
     display: flex;
     justify-content: center;
@@ -20,6 +49,20 @@
 .information_container .information img {
     width: 100%;
     height: 500px;
+    max-width: 400px;
+}
+
+/* Responsive image */
+@media (max-width: 768px) {
+    .information_container .information img {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .information_container .information img {
+        height: 300px;
+    }
 }
 
 .information_container .information .suggestion {

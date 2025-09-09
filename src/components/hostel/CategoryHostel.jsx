@@ -9,7 +9,7 @@ function CategoryHostel() {
     const token = localStorage.getItem('token');
     async function getHostels() {
       try {
-        const response = await fetch("http://127.0.0.1:8080/hq/api/hostels", {
+        const response = await fetch("/hq/api/hostels", {
           method: "GET",
           headers: { 
             "Content-Type": "application/json",

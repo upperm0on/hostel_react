@@ -17,7 +17,7 @@ function HostelCard({ hostel }) {
     console.error("Error parsing room_details:", err);
   }
 
-  const base_image_url = 'http://localhost:8080/'
+  const base_image_url = '/'
   
   return (
     <>

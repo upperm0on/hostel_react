@@ -30,7 +30,7 @@ function DetailPopup({ hostel, open, onClose }) {
           <div className="hostel_details">
             <div className="image_section">
               <img
-                src={"http://localhost:8080/" + hostel.image || "#"}
+                src={"/" + hostel.image || "#"}
                 alt={hostel.name || "Hostel"}
               />
             </div>

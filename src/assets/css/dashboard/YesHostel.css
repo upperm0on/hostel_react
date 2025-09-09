@@ -2,4 +2,22 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Responsive dashboard layout */
+@media (max-width: 768px) {
+    .hostel_dashboard_space {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hostel_dashboard_space {
+        padding: 10px;
+        gap: 10px;
+    }
 }

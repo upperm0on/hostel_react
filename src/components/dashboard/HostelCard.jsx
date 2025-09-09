@@ -29,7 +29,7 @@ function HostelCard() {
     ? JSON.parse(hostel.additional_details)
     : [];
 
-  const base_url = "http://localhost:8080/";
+  const base_url = "/";
 
   return (
     <div className="dashboard_card">

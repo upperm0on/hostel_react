@@ -11,7 +11,7 @@ function Dashboard() {
   const get_consumer = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8080/hq/api/payments/consumer_request/",
+        "/hq/api/payments/consumer_request/",
         {
           method: "POST",
           headers: {

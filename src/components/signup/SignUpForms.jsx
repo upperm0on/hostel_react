@@ -1,6 +1,7 @@
 import "../../assets/css/signup/SignUpForms.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 
 function SignUpForms() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +13,7 @@ function SignUpForms() {
     const password = e.target.querySelector('#password').value
     const email = e.target.querySelector('#email').value
     
-    const res = await fetch("http://localhost:8080/hq/api/signup/", {
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.SIGNUP), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 'username': username, 'password':  password, 'email': email }),
