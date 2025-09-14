@@ -1,10 +1,10 @@
 // API Configuration
 // This file centralizes API endpoint configuration for easier environment management
 
-// Get the base URL from environment variables or use relative paths
+// Get the base URL from environment variables or use localhost:8000
 const getBaseURL = () => {
-  // If VITE_API_BASE_URL is set, use it; otherwise use relative paths
-  return import.meta.env.VITE_API_BASE_URL || '';
+  // If VITE_API_BASE_URL is set, use it; otherwise use localhost:8000
+  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 };
 
 // API endpoints configuration

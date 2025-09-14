@@ -1,27 +1,17 @@
-.card-container {
-    display: flex;
-    flex-direction: row;
-    justify-self: center;
-    margin: 50px;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 50px auto;
+.main_container {
+    width: 100%;
+    min-height: 100vh;
 }
 
-/* Responsive card container */
+/* Responsive main container */
 @media (max-width: 768px) {
-    .card-container {
-        margin: 30px;
-        gap: 15px;
+    .main_container {
+        padding: 0;
     }
 }
 
 @media (max-width: 480px) {
-    .card-container {
-        margin: 20px;
-        flex-direction: column;
-        gap: 10px;
+    .main_container {
+        padding: 0;
     }
 }

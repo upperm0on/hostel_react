@@ -1,17 +1,19 @@
 import "../../assets/css/hostel/DetailRoom.css";
+import { buildApiUrl, buildMediaUrl, API_ENDPOINTS } from "../../config/api";
+import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard } from "lucide-react";
 
 function DetailRoom({ room_details, hostel }) {
   const amenities = JSON.parse(room_details["amenities"]);
 
   const genderKeys = Object.keys(room_details.gender);
 
-  const base_image_url = "/media/room_images";
+  const base_image_url = buildMediaUrl("/media/room_images");
 
   const token = localStorage.getItem("token");
   const handlePayment = async () => {
     try {
       // Initiate payment on backend
-      const res = await fetch("/hq/api/payments/", {
+      const res = await fetch(buildApiUrl(API_ENDPOINTS.PAYMENTS), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +27,7 @@ function DetailRoom({ room_details, hostel }) {
       const backendData = await res.json();
 
       // Initialize Paystack transaction
-      const paystackRes = await fetch("/hq/api/payments/verify/", {
+      const paystackRes = await fetch(buildApiUrl(API_ENDPOINTS.PAYMENT_VERIFY), {
         method: "POST",
         headers: {
           Authorization: `Token ${token}`, // Replace with your actual secret key
@@ -50,39 +52,70 @@ function DetailRoom({ room_details, hostel }) {
   };
 
   return (
-    <div className="room-container">
-      <div className="image-container">
+    <div className="room-card">
+      <div className="room-image-container">
         <img
           src={`${base_image_url}/${hostel.name}/${room_details.number_in_room}/${room_details.room_image}`}
           alt="room_image"
         />
+        <div className="room-badge">
+          <Users size={14} />
+          <span>{room_details["number_in_room"]} in Room</span>
+        </div>
       </div>
-      <ul className="room_details">
-        <li className="room_detail_item">
-          Number in Room: <span>{room_details["number_in_room"]}</span>
-        </li>
-        <li className="room_detail_item">
-          Price: <span>{room_details["price"]}</span>$
-        </li>
-        <li className="room_detail_item">
-          {genderKeys.length > 1
-            ? "Mixed"
-            : genderKeys[0].charAt(0).toUpperCase() + genderKeys[0].slice(1)}
-        </li>
-        <button type="button" className="booking_btn" onClick={handlePayment}>
-          Book Room
+      
+      <div className="room-content">
+        <div className="room-header">
+          <h4 className="room-title">Room {room_details["number_in_room"]}</h4>
+          <div className="room-gender">
+            <Bed size={16} />
+            <span>
+              {genderKeys.length > 1
+                ? "Mixed"
+                : genderKeys[0].charAt(0).toUpperCase() + genderKeys[0].slice(1)}
+            </span>
+          </div>
+        </div>
+
+        <div className="room-pricing">
+          <div className="price-container">
+            <DollarSign size={20} className="price-icon" />
+            <span className="price-amount">{room_details["price"]}</span>
+            <span className="price-period">/month</span>
+          </div>
+        </div>
+
+        <div className="room-amenities">
+          <h5 className="amenities-title">Room Amenities</h5>
+          <div className="amenities-list">
+            {amenities.map((amenity, key) => {
+              return (
+                <div className="amenity-tag" key={key}>
+                  <div className="amenity-icon">
+                    {amenity.toLowerCase().includes('wifi') && <Wifi size={14} />}
+                    {amenity.toLowerCase().includes('parking') && <Car size={14} />}
+                    {amenity.toLowerCase().includes('security') && <Shield size={14} />}
+                    {amenity.toLowerCase().includes('kitchen') && <Utensils size={14} />}
+                    {amenity.toLowerCase().includes('gym') && <Dumbbell size={14} />}
+                    {!amenity.toLowerCase().includes('wifi') && 
+                     !amenity.toLowerCase().includes('parking') && 
+                     !amenity.toLowerCase().includes('security') && 
+                     !amenity.toLowerCase().includes('kitchen') && 
+                     !amenity.toLowerCase().includes('gym') && 
+                     <CheckCircle size={14} />}
+                  </div>
+                  <span className="amenity-name">{amenity}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <button type="button" className="book-room-btn" onClick={handlePayment}>
+          <CreditCard size={18} />
+          <span>Book This Room</span>
         </button>
-      </ul>
-      <ul className="amenities">
-        <h3 className="title">Room Amenities</h3>
-        {amenities.map((amenity, key) => {
-          return (
-            <li className="amenity-item" key={key}>
-              {amenity}
-            </li>
-          );
-        })}
-      </ul>
+      </div>
     </div>
   );
 }

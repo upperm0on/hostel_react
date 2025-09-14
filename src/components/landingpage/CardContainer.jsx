@@ -1,16 +1,16 @@
 import "../../assets/css/landingpage/CardContainer.css";
-import SearchForm from "./SearchForm";
 import LandingTest from "./LandingText";
-import InformationSection from "./InformationSection";
+import FeaturesSection from "./FeaturesSection";
+import HowItWorks from "./HowItWorks";
+import CTASection from "./CTASection";
 
 function CardContainer() {
   return (
-    <div className="hero_section">
+    <div className="main_container">
       <LandingTest />
-      <div class="card-container">
-        <SearchForm />
-      </div>
-      <InformationSection />
+      <FeaturesSection />
+      <HowItWorks />
+      <CTASection />
     </div>
   );
 }

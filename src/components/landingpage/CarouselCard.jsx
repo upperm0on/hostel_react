@@ -4,32 +4,52 @@ function CarouselCard() {
   return (
     <div className="carousel_card">
       <div className="carousel_title">
-        <p className="title">Search Experience</p>
+        <p className="title">Student Success Stories</p>
       </div>
       <p className="subtitle">
-        Seamless Hostel Booking Experience from Home
+        Real experiences from students who found their perfect hostel
       </p>
       <div className="flexed_content">
         
-        <div className="before">
-          <div className="before_details">
-            <div className="before_icon">
-              <img src="/icons/close_button.svg" alt="A Before Icon must be here" />
+        <div className="testimonial_card">
+          <div className="testimonial_header">
+            <div className="student_avatar">
+              <img src="/icons/person.svg" alt="Student" />
+            </div>
+            <div className="student_info">
+              <h4 className="student_name">Sarah Johnson</h4>
+              <p className="student_campus">University of Technology</p>
             </div>
           </div>
-          <div className="before_image_container">
-            <img src="/images/chatgpt_2.png" alt="The Before Image must be here" />
+          <div className="testimonial_content">
+            <p className="testimonial_text">
+              "Found my perfect hostel in just 2 days! The platform made it so easy to compare 
+              options and connect with the manager directly. Saved me weeks of searching."
+            </p>
+            <div className="rating">
+              ⭐⭐⭐⭐⭐
+            </div>
           </div>
         </div>
         
-        <div className="before">
-          <div className="before_details">
-            <div className="before_icon">
-              <img src="/icons/approved.svg" alt="A before Icon must be here" />
+        <div className="testimonial_card">
+          <div className="testimonial_header">
+            <div className="student_avatar">
+              <img src="/icons/person.svg" alt="Student" />
+            </div>
+            <div className="student_info">
+              <h4 className="student_name">Michael Chen</h4>
+              <p className="student_campus">State University</p>
             </div>
           </div>
-          <div className="before_image_container">
-            <img src="/images/chat3.png" alt="The before Image must be here" />
+          <div className="testimonial_content">
+            <p className="testimonial_text">
+              "The verified listings gave me confidence. No more worrying about fake ads. 
+              The hostel I booked exceeded my expectations and the price was fair."
+            </p>
+            <div className="rating">
+              ⭐⭐⭐⭐⭐
+            </div>
           </div>
         </div>
       </div>

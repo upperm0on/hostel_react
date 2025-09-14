@@ -58,66 +58,93 @@
 }
 
 
-.carousel_card .flexed_content .before {
-    /* box-shadow: 0 0 20px -10px var(--color-muted-text); */
-    overflow: hidden;
-}
-
-.carousel_card .flexed_content .before .before_details {
-    height: 100px;
-    width: 100px;
-    margin: 30px auto;
-}
-
-.carousel-card .flexed_content .before:nth-child(1) .before:nth-child(1) .before_icon {
-    position: relative;
-}
-
-.carousel_card .flexed_content .before:nth-child(1) .before_details .before_icon img{
-    height: 175%;
-    width: 175%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: -20px;
-}
-
-.carousel-card .flexed_content .before .before_details .before_icon {
-    margin: 30px;
-    outline: 1px solid black;
-    background: red;
-}
-
-.carousel_card .flexed_content .before .before_details .before_icon img{
-    height: 100%;
+.testimonial_card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
     width: 100%;
 }
 
-.carousel_card .flexed_content .before .before_image_container {
-    height: 300px;
-    width: 500px;
-    max-width: 100%;
+.testimonial_header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-/* Responsive image containers */
+.student_avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent-green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.student_avatar img {
+    width: 25px;
+    height: 25px;
+    filter: brightness(0) invert(1);
+}
+
+.student_name {
+    font-size: 1.1rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-dark-text);
+    margin: 0;
+}
+
+.student_campus {
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    color: var(--color-muted-text);
+    margin: 0;
+}
+
+.testimonial_content {
+    text-align: left;
+}
+
+.testimonial_text {
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--color-muted-text);
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.rating {
+    font-size: 1.2rem;
+    color: #fbbf24;
+}
+
+/* Responsive testimonial cards */
 @media (max-width: 768px) {
-    .carousel_card .flexed_content .before .before_image_container {
-        height: 250px;
-        width: 400px;
+    .testimonial_card {
+        padding: 25px;
+        max-width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .carousel_card .flexed_content .before .before_image_container {
-        height: 200px;
-        width: 100%;
-        max-width: 350px;
+    .testimonial_card {
+        padding: 20px;
     }
-}
-
-.carousel_card .flexed_content .before .before_image_container img {
-    height: 100%;
-    width: 100%;
+    
+    .testimonial_header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .testimonial_text {
+        font-size: 0.9rem;
+    }
 }
 
 .carousel_card .subtitle {

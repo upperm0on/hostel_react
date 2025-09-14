@@ -2,14 +2,19 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/css/signup/SignUpForms.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
+import { Eye, EyeOff, User, Lock } from "lucide-react";
 
 function LoginForms() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    
     const username = e.target.querySelector("#name").value;
     const password = e.target.querySelector("#password").value;
 
@@ -21,7 +26,8 @@ function LoginForms() {
       });
 
       if (!res.ok) {
-        throw new Error("Invalid credentials");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Invalid credentials");
       }
 
       const data = await res.json();
@@ -41,6 +47,8 @@ function LoginForms() {
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -48,12 +56,12 @@ function LoginForms() {
     <form className="sign_up" onSubmit={handleLogin}>
       <h2 className="form-title">Jump Back In</h2>
 
-      {error && <p className="error-message">{error}</p>}
+      {error && <div className="error-message">{error}</div>}
 
       <div className="sign_up-item">
         <label htmlFor="name">
           <div className="label_container">
-            <img src="/icons/person.svg" alt="person" />
+            <User size={20} />
           </div>
         </label>
         <input type="text" id="name" placeholder="Name" autoFocus required />
@@ -62,7 +70,7 @@ function LoginForms() {
       <div className="sign_up-item">
         <label htmlFor="password">
           <div className="label_container">
-            <img src="/icons/password.svg" alt="password" />
+            <Lock size={20} />
           </div>
         </label>
         <input
@@ -75,18 +83,14 @@ function LoginForms() {
           className="show_hide"
           onClick={() => setShowPassword((prev) => !prev)}
         >
-          <img
-            src={
-              showPassword ? "/icons/opened_eye.svg" : "/icons/closed_eye.svg"
-            }
-            alt="toggle password visibility"
-          />
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </div>
       </div>
 
-      <button type="submit" className="form_submit">
-        Submit
+      <button type="submit" className="form_submit" disabled={isLoading}>
+        {isLoading ? "Signing In..." : "Submit"}
       </button>
+      
       <p className="login_option">
         Don't have an account yet? <Link to="/signup">Sign-Up Here</Link>
       </p>

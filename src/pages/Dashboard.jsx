@@ -3,6 +3,7 @@ import NoHostel from "../components/dashboard/NoHostel";
 import YesHostel from "../components/dashboard/YesHostel";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import { buildApiUrl, API_ENDPOINTS } from "../config/api";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
@@ -11,7 +12,7 @@ function Dashboard() {
   const get_consumer = async () => {
     try {
       const res = await fetch(
-        "/hq/api/payments/consumer_request/",
+        buildApiUrl(API_ENDPOINTS.CONSUMER_REQUEST),
         {
           method: "POST",
           headers: {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MapPin, Search } from "lucide-react";
 import "../../assets/css/landingpage/SearchForm.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 
@@ -104,7 +105,7 @@ function SearchForm() {
         {/* Location */}
         <div className="search_form_item first">
           <div className="location-icon-container">
-            <img src="/icons/location.svg" alt="" className="location_icon" />
+            <MapPin size={20} className="location_icon" />
           </div>
           <input
             type="text"
@@ -124,6 +125,7 @@ function SearchForm() {
         )}
 
           <button type="submit" className="search_button">
+            <Search size={18} />
             Search
           </button>
         </div>

@@ -1,23 +1,25 @@
 .hostel_card {
-    margin: 10px;
-    min-width: 250px;
-    max-width: 350px;
+    margin: 12px;
+    min-width: 240px;
+    max-width: 260px;
     width: 100%;
-    box-shadow: 0px 0px 22px -10px var(--color-dark-text);
-    border-radius: 15px;
-    backdrop-filter: blur(20px);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
-    transition: transform 300ms ease;
+    transition: all 0.3s ease;
     cursor: pointer;
     overflow: hidden;
+    position: relative;
 }
 
 /* Responsive hostel cards */
 @media (max-width: 768px) {
     .hostel_card {
         min-width: 200px;
-        max-width: 300px;
+        max-width: 240px;
     }
 }
 
@@ -25,51 +27,157 @@
     .hostel_card {
         min-width: 100%;
         max-width: 100%;
-        margin: 5px;
+        margin: 8px;
     }
 }
 
 .hostel_card:hover {
-    transform: scale(1.1);
-    transition: 300ms ease;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
 }
 
 /* Reduce hover effect on mobile */
 @media (max-width: 480px) {
     .hostel_card:hover {
-        transform: scale(1.05);
+        transform: translateY(-2px);
     }
 }
 
 .hostel_card .card-img-container {
     width: 100%;
-    height: 225px;
+    height: 200px;
     position: relative;
     overflow: hidden;
 }
 
 .hostel_card .card-img-container img {
+    width: 100%;
     height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.hostel_card:hover .card-img-container img {
+    transform: scale(1.05);
+}
+
+.card-overlay {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hostel_card:hover .card-overlay {
+    opacity: 1;
+}
+
+.view-details {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
 }
 
 .hostel_card .hostel_details {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    padding: 10px;
-    gap: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.hostel_card .hostel_details .details1,
-.hostel_card .hostel_details .details2 {
-    list-style: none;
-    font-family: var(--font-body);
-    font-weight: 350;
+.hostel_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
 }
 
-.hostel_card .hostel_details .details2 {
+.hostel_name {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f8fafc;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.star-icon {
+    color: #f59e0b;
+}
+
+.hostel_info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info_item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.info-icon {
+    color: #3b82f6;
+}
+
+.room_details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.room_item {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.more_rooms {
+    background: #e2e8f0;
+    color: #64748b;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.8rem;
     font-weight: 500;
 }
 

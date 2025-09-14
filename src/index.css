@@ -54,6 +54,7 @@ body {
   scrollbar-width: thin; /* Sets a thin scrollbar width */
   scrollbar-color: #c1c1c1 transparent; /* thumb color and track color */
   background: linear-gradient(180deg, var(--color-bg-light), #d5d5d5) center center fixed;
+  padding-top: 80px; /* Account for fixed navbar */
 }
 
 .open-sans {
