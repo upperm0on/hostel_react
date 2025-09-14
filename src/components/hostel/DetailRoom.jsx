@@ -67,7 +67,7 @@ function DetailRoom({ room_details, hostel }) {
       });
 
       const response = await paystackRes.json();
-      window.open(response.authorization_url, "_blank");
+      window.location.href = response.authorization_url;
 
     } catch (error) {
       console.error("Payment error:", error);
