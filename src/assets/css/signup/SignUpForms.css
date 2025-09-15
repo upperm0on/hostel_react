@@ -106,6 +106,133 @@
   font-weight: 400;
 }
 
+.sign_up .sign_up-item .gender-select {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #1e293b;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.sign_up .sign_up-item .gender-select option {
+  color: #1e293b;
+  background: #ffffff;
+  padding: 8px;
+}
+
+/* Phone input container */
+.phone-input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+}
+
+.country-code-display {
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+  gap: 8px;
+}
+
+.country-code-number {
+  font-weight: 700;
+  color: #1e40af;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+
+.country-code-name {
+  font-weight: 500;
+  color: #475569;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.country-code-display:hover {
+  background: #e2e8f0;
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.country-code-display:hover .country-code-number {
+  color: #1d4ed8;
+}
+
+.country-code-display:hover .country-code-name {
+  color: #334155;
+  opacity: 1;
+}
+
+.country-code-display:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+/* Editable state for country code */
+.country-code-display.editable {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  animation: pulse 2s infinite;
+}
+
+.country-code-display.editable .country-code-number {
+  color: #92400e;
+}
+
+.country-code-display.editable .country-code-name {
+  color: #92400e;
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.phone-number-only {
+  margin-top: 8px;
+}
+
+/* Add spacing after first 3 characters in phone input */
+.sign_up .sign_up-item input#phone {
+  letter-spacing: 0.05em;
+}
+
+/* Style for when country code is detected */
+.sign_up .sign_up-item input#phone.phone-number-only {
+  background: #fefefe;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-weight: 500;
+  color: #374151;
+}
+
 .sign_up .sign_up-item .show_hide {
   cursor: pointer;
   height: 24px;
@@ -227,3 +354,5 @@
 .sign_up-item:nth-child(3) { animation-delay: 0.2s; }
 .sign_up-item:nth-child(4) { animation-delay: 0.3s; }
 .sign_up-item:nth-child(5) { animation-delay: 0.4s; }
+.sign_up-item:nth-child(6) { animation-delay: 0.5s; }
+.sign_up-item:nth-child(7) { animation-delay: 0.6s; }
