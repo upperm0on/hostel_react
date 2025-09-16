@@ -95,8 +95,8 @@ function DetailedSearch() {
           />
         </div>
         <div className="search_results_box">
-          {filteredHostels.map((hostel, key) => (
-            <HostelCard hostel={hostel} key={key} />
+          {filteredHostels.map((hostel) => (
+            <HostelCard hostel={hostel} key={hostel.id} />
           ))}
         </div>
       </div>

@@ -3,9 +3,9 @@
 
 // Get the base URL from environment variables or use relative path
 const getBaseURL = () => {
-  // If VITE_API_BASE_URL is set, use it; otherwise use relative path
+  // If VITE_API_BASE_URL is set, use it; otherwise default to local backend
   // This allows for easy switching between development and production
-  return import.meta.env.VITE_API_BASE_URL || '';
+  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 };
 
 // API endpoints configuration
@@ -16,7 +16,7 @@ export const API_ENDPOINTS = {
   LANDING_PAGE: '/hq/api/landing_page/',
   
   // Hostel endpoints
-  HOSTELS: '/hq/api/hostels',
+  HOSTELS: '/hq/api/hostels/',
   SEARCH_REQUEST: '/hq/api/search_request/',
   
   // Payment endpoints
@@ -42,7 +42,7 @@ export const buildMediaUrl = (path) => {
 };
 
 // Environment variable usage:
-// - VITE_API_BASE_URL not set: Uses relative paths (e.g., /hq/api/login/)
+// - VITE_API_BASE_URL not set: Uses http://localhost:8080 by default
 // - VITE_API_BASE_URL=http://localhost:8000: Uses absolute URLs
 // - VITE_API_BASE_URL=https://api.example.com: Uses production URLs
 

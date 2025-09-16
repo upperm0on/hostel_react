@@ -30,12 +30,13 @@ function CategoryHostel() {
     const token = localStorage.getItem('token');
     async function getHostels() {
       try {
+        // Try a simple fetch without custom headers to test CORS
         const response = await fetch(buildApiUrl(API_ENDPOINTS.HOSTELS), {
           method: "GET",
           headers: { 
             "Content-Type": "application/json",
             "Authorization": `Token ${token}`
-           },
+          },
         });
 
         if (!response.ok) {

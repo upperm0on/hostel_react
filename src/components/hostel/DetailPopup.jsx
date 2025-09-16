@@ -93,8 +93,8 @@ function DetailPopup({ hostel, open, onClose }) {
                 Available Rooms
               </h3>
               <div className="rooms_list">
-                {room_details.map((detail, key) => (
-                  <DetailRoom key={key} room_details={detail} hostel={hostel} />
+                {room_details.map((detail) => (
+                  <DetailRoom key={detail.uuid || detail.number_in_room} room_details={detail} hostel={hostel} />
                 ))}
               </div>
             </div>

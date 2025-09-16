@@ -173,6 +173,15 @@
     margin-top: 8px;
 }
 
+.book-room-btn[disabled],
+.book-room-btn[aria-disabled="true"] {
+    background: #cbd5e1;
+    color: #475569;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 .book-room-btn:hover {
     background: #2563eb;
     transform: translateY(-1px);

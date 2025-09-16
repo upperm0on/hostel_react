@@ -1,16 +1,19 @@
 import "../../assets/css/hostel/DetailRoom.css";
 import { buildApiUrl, buildMediaUrl, API_ENDPOINTS } from "../../config/api";
-import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard } from "lucide-react";
+import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban } from "lucide-react";
 
 function DetailRoom({ room_details, hostel }) {
   const amenities = JSON.parse(room_details["amenities"]);
 
   const genderKeys = Object.keys(room_details.gender);
 
+  const isRoomAvailable = Boolean(room_details.room_available);
+
   const base_image_url = buildMediaUrl("/media/room_images");
 
   const token = localStorage.getItem("token");
   const handlePayment = async () => {
+    if (!isRoomAvailable) return;
     try {
       // Initiate payment on backend
       const res = await fetch(buildApiUrl(API_ENDPOINTS.PAYMENTS), {
@@ -20,7 +23,7 @@ function DetailRoom({ room_details, hostel }) {
           Authorization: `Token ${token}`,
         },
         body: JSON.stringify({ 
-          room_id: room_details.id,
+          room_uuid: room_details.uuid,
           room_number: room_details.number_in_room,
         }),
       });
@@ -39,6 +42,7 @@ function DetailRoom({ room_details, hostel }) {
           callback_url: "/dashboard/",
           hostel_id: hostel.id,
           room_number: room_details.number_in_room,
+          room_uuid: room_details.uuid,
         }),
       });
 
@@ -55,7 +59,7 @@ function DetailRoom({ room_details, hostel }) {
     <div className="room-card">
       <div className="room-image-container">
         <img
-          src={`${base_image_url}/${hostel.name}/${room_details.number_in_room}/${room_details.room_image}`}
+          src={room_details.room_image ? `${base_image_url}/${hostel.name}/${room_details.number_in_room}/${room_details.room_image}` : "/images/room1.png"}
           alt="room_image"
         />
         <div className="room-badge">
@@ -111,9 +115,16 @@ function DetailRoom({ room_details, hostel }) {
           </div>
         </div>
 
-        <button type="button" className="book-room-btn" onClick={handlePayment}>
-          <CreditCard size={18} />
-          <span>Book This Room</span>
+        <button
+          type="button"
+          className="book-room-btn"
+          onClick={handlePayment}
+          disabled={!isRoomAvailable}
+          aria-disabled={!isRoomAvailable}
+          title={isRoomAvailable ? "Book this room" : "Room not available"}
+        >
+          {isRoomAvailable ? <CreditCard size={18} /> : <Ban size={18} />}
+          <span>{isRoomAvailable ? "Book This Room" : "Not Available"}</span>
         </button>
       </div>
     </div>
