@@ -491,12 +491,13 @@ function SignUpForms() {
           <input 
             type="text" 
             id="phone" 
+            name="phone"
             placeholder={countryCode ? "Enter phone number" : "Phone Number (start with country code)"} 
             required 
             value={formatPhoneNumber(formData.phone)}
             onChange={handlePhoneChange}
             inputMode="numeric"
-            pattern="[0-9]*"
+            pattern="[0-9 ]*"
             className={countryCode && !isCountryCodeEditable ? "phone-number-only" : ""}
           />
         </div>
