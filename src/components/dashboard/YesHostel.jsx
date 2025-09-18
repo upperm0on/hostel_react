@@ -2,6 +2,7 @@ import "../../assets/css/dashboard/YesHostel.css";
 import HostelCard from "./HostelCard";
 import ManagerInfo from "./ManagerInfo";
 import BookingInfo from "./BookingInfo";
+import YourRoom from "./YourRoom";
 
 function YesHostel() {
   // Static hostel info
@@ -10,6 +11,7 @@ function YesHostel() {
         <div className="details_side">
             <ManagerInfo />
             <BookingInfo />
+            <YourRoom />
         </div>
         <HostelCard />
     </div>

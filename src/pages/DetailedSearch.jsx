@@ -32,7 +32,12 @@ function DetailedSearch() {
 
       hostels.forEach((hostel) => {
         if (hostel.room_details) {
-          JSON.parse(hostel.room_details).forEach((room) => {
+          const rooms = Array.isArray(hostel.room_details)
+            ? hostel.room_details
+            : (typeof hostel.room_details === 'string'
+                ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
+                : []);
+          rooms.forEach((room) => {
             if (room.number_in_room) roomSet.add(room.number_in_room);
           });
         }
@@ -61,7 +66,11 @@ function DetailedSearch() {
       let matchesAmenities = true;
 
       if (selectedRoomType) {
-        const rooms = JSON.parse(hostel.room_details || "[]");
+        const rooms = Array.isArray(hostel.room_details)
+          ? hostel.room_details
+          : (typeof hostel.room_details === 'string'
+              ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
+              : []);
         matchesRoom = rooms.some(
           (r) => r.number_in_room.toString() === selectedRoomType
         );

@@ -10,6 +10,7 @@ function LogoutConfirm({ children, onConfirm }) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
+    localStorage.removeItem("email");
     localStorage.removeItem("search_data");
     localStorage.removeItem("information");
     localStorage.removeItem("room_booked");

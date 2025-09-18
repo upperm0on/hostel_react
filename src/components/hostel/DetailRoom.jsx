@@ -3,7 +3,27 @@ import { buildApiUrl, buildMediaUrl, API_ENDPOINTS } from "../../config/api";
 import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban } from "lucide-react";
 
 function DetailRoom({ room_details, hostel }) {
-  const amenities = JSON.parse(room_details["amenities"]);
+  // Safely parse amenities - could be JSON array or comma-separated string
+  const amenities = (() => {
+    try {
+      // Try parsing as JSON first
+      if (typeof room_details.amenities === 'string' && room_details.amenities.trim().startsWith('[')) {
+        return JSON.parse(room_details.amenities);
+      }
+      // If it's a comma-separated string, split it
+      if (typeof room_details.amenities === 'string') {
+        return room_details.amenities.split(',').map(item => item.trim()).filter(item => item);
+      }
+      // If it's already an array, return it
+      if (Array.isArray(room_details.amenities)) {
+        return room_details.amenities;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error parsing amenities:', error);
+      return [];
+    }
+  })();
 
   const genderKeys = Object.keys(room_details.gender);
 

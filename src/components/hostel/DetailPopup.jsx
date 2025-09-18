@@ -16,9 +16,31 @@ function DetailPopup({ hostel, open, onClose }) {
   // Safely parse room details
   const room_details = Array.isArray(hostel.room_details)
     ? hostel.room_details
-    : JSON.parse(hostel.room_details || "[]");
+    : (typeof hostel.room_details === 'string'
+        ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
+        : []);
 
-  const additional_details = JSON.parse(hostel.additional_details);
+  // Safely parse additional details - could be JSON array or comma-separated string
+  const additional_details = (() => {
+    try {
+      // Try parsing as JSON first
+      if (typeof hostel.additional_details === 'string' && hostel.additional_details.trim().startsWith('[')) {
+        return JSON.parse(hostel.additional_details);
+      }
+      // If it's a comma-separated string, split it
+      if (typeof hostel.additional_details === 'string') {
+        return hostel.additional_details.split(',').map(item => item.trim()).filter(item => item);
+      }
+      // If it's already an array, return it
+      if (Array.isArray(hostel.additional_details)) {
+        return hostel.additional_details;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error parsing additional_details:', error);
+      return [];
+    }
+  })();
   
   return (
     <div className="detail_popup_backdrop" onClick={onClose}>

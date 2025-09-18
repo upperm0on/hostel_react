@@ -16,10 +16,17 @@ function NavBar() {
       setUsername(localStorage.getItem("name"));
     };
 
+    const handleAuthChange = () => {
+      setToken(localStorage.getItem("token"));
+      setUsername(localStorage.getItem("name"));
+    };
+
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("authChange", handleAuthChange);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("authChange", handleAuthChange);
     };
   }, []);
 

@@ -3,7 +3,7 @@
 
 // Get the base URL from environment variables or use relative path
 const getBaseURL = () => {
-  // If VITE_API_BASE_URL is set, use it; otherwise use relative path
+  // If VITE_API_BASE_URL is set, use it; otherwise use relative paths
   // This allows for easy switching between development and production
   return import.meta.env.VITE_API_BASE_URL || '';
 };
@@ -42,8 +42,8 @@ export const buildMediaUrl = (path) => {
 };
 
 // Environment variable usage:
-// - VITE_API_BASE_URL not set: Uses relative paths (e.g., /hq/api/login/)
-// - VITE_API_BASE_URL=http://localhost:8000: Uses absolute URLs
+// - VITE_API_BASE_URL not set: Uses relative paths by default
+// - VITE_API_BASE_URL=http://localhost:8000: Uses absolute URLs for development
 // - VITE_API_BASE_URL=https://api.example.com: Uses production URLs
 
 // Default export for easy importing

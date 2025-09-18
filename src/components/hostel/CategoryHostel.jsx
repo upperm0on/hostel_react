@@ -2,28 +2,66 @@ import { useEffect, useState, useRef } from "react";
 import "../../assets/css/hostel/CategoryHostel.css";
 import HostelCard from "./HostelCard";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Building2, Star, Users, MapPin } from "lucide-react";
 
 function CategoryHostel() {
   const [hostels_data, setHostelsData] = useState([]);
-  const scrollContainerRef = useRef(null);
+  const [groupedHostels, setGroupedHostels] = useState({});
+  const scrollContainerRefs = useRef({});
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
+  // Category mapping based on category IDs
+  const categoryMapping = {
+    1: { name: "Budget Hostels", icon: Building2, description: "Affordable accommodation for students" },
+    2: { name: "Standard Hostels", icon: Building2, description: "Comfortable living with essential amenities" },
+    3: { name: "Premium Hostels", icon: Star, description: "High-end accommodation with premium facilities" },
+    4: { name: "Luxury Hostels", icon: Star, description: "Top-tier living with luxury amenities" },
+    5: { name: "Shared Accommodation", icon: Users, description: "Shared living spaces for community feel" },
+    6: { name: "Private Rooms", icon: Building2, description: "Individual rooms for privacy" },
+    7: { name: "Campus Housing", icon: MapPin, description: "On-campus accommodation options" },
+    8: { name: "Off-Campus Housing", icon: MapPin, description: "Convenient off-campus locations" },
+    9: { name: "Family Housing", icon: Users, description: "Suitable for families and couples" },
+    10: { name: "International Housing", icon: Building2, description: "Specialized for international students" }
+  };
+
+  const scrollLeft = (categoryKey) => {
+    const container = scrollContainerRefs.current[categoryKey];
+    if (container) {
+      container.scrollBy({
         left: -280,
         behavior: 'smooth'
       });
     }
   };
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
+  const scrollRight = (categoryKey) => {
+    const container = scrollContainerRefs.current[categoryKey];
+    if (container) {
+      container.scrollBy({
         left: 280,
         behavior: 'smooth'
       });
     }
+  };
+
+  // Function to group hostels by category
+  const groupHostelsByCategory = (hostels) => {
+    const grouped = {};
+    
+    hostels.forEach(hostel => {
+      const categoryId = hostel.category;
+      const categoryKey = categoryId || 'uncategorized';
+      
+      if (!grouped[categoryKey]) {
+        grouped[categoryKey] = {
+          categoryId,
+          hostels: []
+        };
+      }
+      
+      grouped[categoryKey].hostels.push(hostel);
+    });
+    
+    return grouped;
   };
 
   useEffect(() => {
@@ -46,6 +84,10 @@ function CategoryHostel() {
         const hostels = await response.json();
         console.log("Hostel Data:", hostels);
         setHostelsData(hostels); // Store in state
+        
+        // Group hostels by category
+        const grouped = groupHostelsByCategory(hostels);
+        setGroupedHostels(grouped);
       } catch (error) {
         console.error("Error fetching hostels:", error);
       }
@@ -58,23 +100,58 @@ function CategoryHostel() {
   
   return (
     <>
-      <div className="category_section">
-        <div className="category_header">
-          <h2 className="category_name">Available Hostels</h2>
-        </div>
-        <div className="category_container">
-          <button className="nav_button nav_left" onClick={scrollLeft}>
-            <ChevronLeft size={20} />
-          </button>
-          <div className="category_list" ref={scrollContainerRef}>
-            {hostels_data.map((hostel, index) => (
-              <HostelCard key={index} hostel={hostel} />
-            ))}
+      <div className="hostels_main_container">
+
+        {Object.keys(groupedHostels).length > 0 ? (
+          <div className="categories_container">
+            {Object.entries(groupedHostels).map(([categoryKey, categoryData]) => {
+              const categoryInfo = categoryMapping[categoryData.categoryId];
+              const IconComponent = categoryInfo?.icon || Building2;
+              const categoryName = categoryInfo?.name || 'Other Hostels';
+              const categoryDescription = categoryInfo?.description || 'Various accommodation options';
+
+              return (
+                <div key={categoryKey} className="category_section">
+                  <div className="category_header">
+                    <div className="category_title_section">
+                      <div className="category_icon_container">
+                        <IconComponent size={24} className="category_icon" />
+                      </div>
+                      <div className="category_text">
+                        <h2 className="category_name">{categoryName}</h2>
+                        <p className="category_description">{categoryDescription}</p>
+                        <span className="hostel_count">{categoryData.hostels.length} hostel{categoryData.hostels.length !== 1 ? 's' : ''}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="category_container">
+                    <button className="nav_button nav_left" onClick={() => scrollLeft(categoryKey)}>
+                      <ChevronLeft size={20} />
+                    </button>
+                    <div 
+                      className="category_list" 
+                      ref={(el) => scrollContainerRefs.current[categoryKey] = el}
+                    >
+                      {categoryData.hostels.map((hostel, index) => (
+                        <HostelCard key={`${categoryKey}-${index}`} hostel={hostel} />
+                      ))}
+                    </div>
+                    <button className="nav_button nav_right" onClick={() => scrollRight(categoryKey)}>
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <button className="nav_button nav_right" onClick={scrollRight}>
-            <ChevronRight size={20} />
-          </button>
-        </div>
+        ) : (
+          <div className="no_hostels_message">
+            <Building2 size={48} />
+            <h3>No hostels available</h3>
+            <p>Please check back later for available accommodations.</p>
+          </div>
+        )}
       </div>
     </>
   );

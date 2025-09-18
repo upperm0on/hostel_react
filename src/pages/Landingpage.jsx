@@ -18,7 +18,8 @@ function Landingpage() {
       });
       const data = await res.json();
 
-      localStorage.setItem('name', data.username)
+      localStorage.setItem('name', data.name || data.username)
+      localStorage.setItem('email', data.email)
       
     };
 

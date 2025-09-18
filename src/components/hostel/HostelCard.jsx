@@ -7,16 +7,28 @@ function HostelCard({ hostel }) {
   const [open, setOpen] = useState(false);
 
   // Make sure room_details exists and is an array
-  let room_details = [];
-  try {
-    if (Array.isArray(hostel.room_details)) {
-      room_details = hostel.room_details;
-    } else if (typeof hostel.room_details === "string") {
-      room_details = JSON.parse(hostel.room_details);
+  const normalizeRooms = (value) => {
+    try {
+      if (Array.isArray(value)) return value;
+      if (typeof value === "string") {
+        const trimmed = value.trim();
+        if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+          const parsed = JSON.parse(trimmed);
+          return Array.isArray(parsed) ? parsed : [];
+        }
+        return [];
+      }
+      if (typeof value === "object" && value !== null) {
+        return Array.isArray(value) ? value : [];
+      }
+      return [];
+    } catch (e) {
+      console.error("Error normalizing room_details:", e);
+      return [];
     }
-  } catch (err) {
-    console.error("Error parsing room_details:", err);
-  }
+  };
+
+  const room_details = normalizeRooms(hostel.room_details);
 
   const base_image_url = '/'
   
@@ -57,8 +69,12 @@ function HostelCard({ hostel }) {
           </div>
           <div className="hostel_info">
             <div className="info_item">
+              <MapPin size={16} className="info-icon" />
+              <span>{hostel?.campus?.campus || "Unknown Campus"}</span>
+            </div>
+            <div className="info_item">
               <Users size={16} className="info-icon" />
-              <span>Rooms Available</span>
+              <span>{room_details.length} Room Types Available</span>
             </div>
             <div className="room_details">
               {room_details.slice(0, 2).map((room) => (

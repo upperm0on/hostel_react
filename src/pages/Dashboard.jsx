@@ -24,7 +24,9 @@ function Dashboard() {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       localStorage.setItem('information', JSON.stringify(data.data))
-      localStorage.setItem('room_booked', JSON.stringify(data.room))
+      // Store room_uuid if available, otherwise fall back to data.room for backward compatibility
+      const roomIdentifier = data.room_uuid || data.room;
+      localStorage.setItem('room_booked', JSON.stringify(roomIdentifier))
       setHasHostel(data.stat === "True");
     } catch (error) {
       console.error("Error fetching consumer data:", error);

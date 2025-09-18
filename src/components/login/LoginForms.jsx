@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/css/signup/SignUpForms.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
-import { Eye, EyeOff, User, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 
 function LoginForms() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,14 +15,14 @@ function LoginForms() {
     setIsLoading(true);
     setError(null);
     
-    const username = e.target.querySelector("#name").value;
+    const email = e.target.querySelector("#email").value;
     const password = e.target.querySelector("#password").value;
 
     try {
       const res = await fetch(buildApiUrl(API_ENDPOINTS.LOGIN), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
@@ -33,9 +33,10 @@ function LoginForms() {
       const data = await res.json();
 
       if (data.token) {
-        // Save both token and username
+        // Save both token and email
         localStorage.setItem("token", data.token);
-        localStorage.setItem("name", username);
+        localStorage.setItem("email", email);
+        localStorage.setItem("name", data.name || email.split('@')[0]); // Use name from response or email prefix
 
         // 🔔 Tell NavBar to update immediately
         window.dispatchEvent(new Event("authChange"));
@@ -59,12 +60,12 @@ function LoginForms() {
       {error && <div className="error-message">{error}</div>}
 
       <div className="sign_up-item">
-        <label htmlFor="name">
+        <label htmlFor="email">
           <div className="label_container">
-            <User size={20} />
+            <Mail size={20} />
           </div>
         </label>
-        <input type="text" id="name" placeholder="Name" autoFocus required />
+        <input type="email" id="email" placeholder="Email Address" autoFocus required />
       </div>
 
       <div className="sign_up-item">

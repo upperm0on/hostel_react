@@ -389,10 +389,10 @@ function SignUpForms() {
       const res = await fetch(buildApiUrl(API_ENDPOINTS.SIGNUP), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          'username': formData.name, 
-          'password': formData.password, 
+        body: JSON.stringify({
           'email': formData.email,
+          'password': formData.password, 
+          'name': formData.name,
           'gender': formData.gender,
           'phone': formData.phone
         }),
@@ -401,7 +401,8 @@ function SignUpForms() {
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("token", data.token);
-        localStorage.setItem("name", data.username);
+        localStorage.setItem("email", formData.email);
+        localStorage.setItem("name", data.name || formData.name);
         window.location.href = '/hostels';
       } else {
         const errorData = await res.json();
