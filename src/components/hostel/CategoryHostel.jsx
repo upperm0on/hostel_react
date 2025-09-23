@@ -1,13 +1,16 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../assets/css/hostel/CategoryHostel.css";
 import HostelCard from "./HostelCard";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
+import { checkResponseForUnverifiedAccount, handleUnverifiedAccount } from "../../utils/authUtils";
 import { ChevronLeft, ChevronRight, Building2, Star, Users, MapPin } from "lucide-react";
 
 function CategoryHostel() {
   const [hostels_data, setHostelsData] = useState([]);
   const [groupedHostels, setGroupedHostels] = useState({});
   const scrollContainerRefs = useRef({});
+  const navigate = useNavigate();
 
   // Category mapping based on category IDs
   const categoryMapping = {
@@ -66,6 +69,7 @@ function CategoryHostel() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
     async function getHostels() {
       try {
         // Try a simple fetch without custom headers to test CORS
@@ -76,6 +80,12 @@ function CategoryHostel() {
             "Authorization": `Token ${token}`
           },
         });
+
+        // Check if the response indicates an unverified account
+        if (await checkResponseForUnverifiedAccount(response)) {
+          handleUnverifiedAccount(email, navigate);
+          return;
+        }
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -94,7 +104,7 @@ function CategoryHostel() {
     }
 
     getHostels(); // Call the function when component mounts
-  }, []);
+  }, [navigate]);
 
   
   

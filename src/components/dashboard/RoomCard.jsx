@@ -3,7 +3,23 @@ import '../../assets/css/dashboard/RoomCard.css';
 
 function RoomCard({ room }) {
   if (!room) return null;
-  const amenities = room.amenities ? JSON.parse(room.amenities) : [];  
+  // Safe parsing for amenities
+  let amenities = [];
+  if (room.amenities) {
+    // If it's already an array, use it directly
+    if (Array.isArray(room.amenities)) {
+      amenities = room.amenities;
+    } else if (typeof room.amenities === 'string') {
+      // Try parsing as JSON first
+      try {
+        const parsed = JSON.parse(room.amenities);
+        amenities = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        // If JSON parsing fails, try splitting comma-separated string
+        amenities = room.amenities.split(',').map(item => item.trim()).filter(item => item);
+      }
+    }
+  }  
   
   return (
     <div className="room_card">

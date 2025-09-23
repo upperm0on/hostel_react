@@ -42,9 +42,24 @@ function DetailedSearch() {
           });
         }
         if (hostel.additional_details) {
-          JSON.parse(hostel.additional_details).forEach((a) =>
-            amenitySet.add(a)
-          );
+          // Safe parsing for additional_details
+          let additionalDetails = [];
+          
+          // If it's already an array, use it directly
+          if (Array.isArray(hostel.additional_details)) {
+            additionalDetails = hostel.additional_details;
+          } else if (typeof hostel.additional_details === 'string') {
+            // Try parsing as JSON first
+            try {
+              const parsed = JSON.parse(hostel.additional_details);
+              additionalDetails = Array.isArray(parsed) ? parsed : [];
+            } catch {
+              // If JSON parsing fails, try splitting comma-separated string
+              additionalDetails = hostel.additional_details.split(',').map(item => item.trim()).filter(item => item);
+            }
+          }
+          
+          additionalDetails.forEach((a) => amenitySet.add(a));
         }
       });
 
@@ -77,7 +92,23 @@ function DetailedSearch() {
       }
 
       if (selectedAmenities.length > 0) {
-        const hostelAmenities = JSON.parse(hostel.additional_details || "[]");
+        // Safe parsing for additional_details
+        let hostelAmenities = [];
+        
+        // If it's already an array, use it directly
+        if (Array.isArray(hostel.additional_details)) {
+          hostelAmenities = hostel.additional_details;
+        } else if (typeof hostel.additional_details === 'string') {
+          // Try parsing as JSON first
+          try {
+            const parsed = JSON.parse(hostel.additional_details);
+            hostelAmenities = Array.isArray(parsed) ? parsed : [];
+          } catch {
+            // If JSON parsing fails, try splitting comma-separated string
+            hostelAmenities = hostel.additional_details.split(',').map(item => item.trim()).filter(item => item);
+          }
+        }
+        
         matchesAmenities = selectedAmenities.every((a) =>
           hostelAmenities.includes(a)
         );

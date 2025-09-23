@@ -26,9 +26,23 @@ function HostelCard() {
     }
   });
 
-  const additionalDetails = hostel.additional_details
-    ? JSON.parse(hostel.additional_details)
-    : [];
+  // Safe parsing for additional_details
+  let additionalDetails = [];
+  if (hostel.additional_details) {
+    // If it's already an array, use it directly
+    if (Array.isArray(hostel.additional_details)) {
+      additionalDetails = hostel.additional_details;
+    } else if (typeof hostel.additional_details === 'string') {
+      // Try parsing as JSON first
+      try {
+        const parsed = JSON.parse(hostel.additional_details);
+        additionalDetails = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        // If JSON parsing fails, try splitting comma-separated string
+        additionalDetails = hostel.additional_details.split(',').map(item => item.trim()).filter(item => item);
+      }
+    }
+  }
 
   const base_url = "/";
 

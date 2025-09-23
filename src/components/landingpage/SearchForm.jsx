@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { MapPin, Search } from "lucide-react";
 import "../../assets/css/landingpage/SearchForm.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
+import { checkResponseForUnverifiedAccount, handleUnverifiedAccount } from "../../utils/authUtils";
 
 import CampusListDialog from "./CampusListDialog";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function SearchForm() {
   const [location, setLocation] = useState("");
@@ -14,8 +15,10 @@ function SearchForm() {
   const [searchResults, setSearchResults] = useState(null);
   const [error, setError] = useState(null);
   const [showCampusDialog, setShowCampusDialog] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token"); // Ensure token is available
+  const email = localStorage.getItem("email");
 
   // Fetch campus list on component mount
   useEffect(() => {
@@ -28,6 +31,12 @@ function SearchForm() {
             Authorization: `Token ${token}`,
           },
         });
+
+        // Check if the response indicates an unverified account
+        if (await checkResponseForUnverifiedAccount(response)) {
+          handleUnverifiedAccount(email, navigate);
+          return;
+        }
 
         if (!response.ok) {
           throw new Error("Failed to fetch campus list");
@@ -45,7 +54,7 @@ function SearchForm() {
     if (campusList === null) {
       fetchCampusList();
     }
-  }, [campusList, token]);
+  }, [campusList, token, email, navigate]);
 
   // Handle input change for location
   const handleLocationChange = (e) => {
@@ -79,6 +88,12 @@ function SearchForm() {
           room_type: roomType,
         }),
       });
+
+      // Check if the response indicates an unverified account
+      if (await checkResponseForUnverifiedAccount(response)) {
+        handleUnverifiedAccount(email, navigate);
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Search failed");

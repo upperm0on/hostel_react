@@ -27,6 +27,15 @@ function LoginForms() {
 
       if (!res.ok) {
         const errorData = await res.json();
+        
+        // Check if the error is due to unverified account
+        if (errorData.error === "Account not verified" || errorData.account_verified === false) {
+          // User needs to verify their email
+          localStorage.setItem("email", email);
+          navigate("/email-verification");
+          return;
+        }
+        
         throw new Error(errorData.message || "Invalid credentials");
       }
 
@@ -43,6 +52,10 @@ function LoginForms() {
 
         // Redirect
         navigate("/");
+      } else if (data.requires_verification) {
+        // User needs to verify their email
+        localStorage.setItem("email", email);
+        navigate("/email-verification");
       } else {
         setError("Invalid login. Please try again.");
       }

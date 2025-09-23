@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NoHostel from "../components/dashboard/NoHostel";
 import YesHostel from "../components/dashboard/YesHostel";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { buildApiUrl, API_ENDPOINTS } from "../config/api";
+import { checkResponseForUnverifiedAccount, handleUnverifiedAccount } from "../utils/authUtils";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
+  const email = localStorage.getItem("email");
+  const navigate = useNavigate();
   const [hasHostel, setHasHostel] = useState(null);
 
   const get_consumer = async () => {
@@ -21,6 +25,13 @@ function Dashboard() {
           },
         }
       );
+      
+      // Check if the response indicates an unverified account
+      if (await checkResponseForUnverifiedAccount(res)) {
+        handleUnverifiedAccount(email, navigate);
+        return;
+      }
+      
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       localStorage.setItem('information', JSON.stringify(data.data))
