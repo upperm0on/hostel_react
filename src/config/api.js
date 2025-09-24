@@ -1,11 +1,11 @@
 // API Configuration
 // This file centralizes API endpoint configuration for easier environment management
 
-// Get the base URL from environment variables or use localhost:8000
+// Get the base URL from environment variables or use relative paths by default
 const getBaseURL = () => {
-  // If VITE_API_BASE_URL is set, use it; otherwise use localhost:8000
+  // If VITE_API_BASE_URL is set, use it; otherwise use relative paths
   // This allows for easy switching between development and production
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  return import.meta.env.VITE_API_BASE_URL || '';
 };
 
 // API endpoints configuration
@@ -44,7 +44,7 @@ export const buildMediaUrl = (path) => {
 };
 
 // Environment variable usage:
-// - VITE_API_BASE_URL not set: Uses localhost:8000 by default
+// - VITE_API_BASE_URL not set: Uses relative paths by default
 // - VITE_API_BASE_URL=http://localhost:8000: Uses absolute URLs for development
 // - VITE_API_BASE_URL=https://api.example.com: Uses production URLs
 
