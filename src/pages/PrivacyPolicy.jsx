@@ -1,19 +1,23 @@
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import "../assets/css/Legal.css";
 
 function PrivacyPolicy() {
   return (
     <>
       <NavBar />
-      <div className="document_container" style={{ paddingTop: 90, paddingBottom: 40, maxWidth: 1000, margin: "0 auto", paddingLeft: 16, paddingRight: 16 }}>
-        <h1 style={{ marginBottom: 12 }}>Privacy Policy</h1>
-        <p style={{ marginBottom: 16 }}>Last updated: {new Date().toLocaleDateString()}</p>
+      <div className="legal-container">
+        <div className="legal-hero">
+          <h1 className="legal-title">Privacy Policy</h1>
+          <p className="legal-updated">Last updated: {new Date().toLocaleDateString()}</p>
+        </div>
 
+        <div className="legal-card">
         <h2>Overview</h2>
         <p>HostelHQ ("we", "us", "our") connects students with hostel listings. This Privacy Policy explains what information we collect, how we use it, and your rights.</p>
 
         <h2>Information We Collect</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Account data: name, email, password (hashed), verification status.</li>
           <li>Usage data: device info, IP address, pages viewed, timestamps.</li>
           <li>Transaction data: booking references and payment confirmations (processed by third‑party providers).</li>
@@ -21,7 +25,7 @@ function PrivacyPolicy() {
         </ul>
 
         <h2>How We Use Information</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Provide and maintain the service (authentication, search, bookings).</li>
           <li>Improve reliability, performance, and user experience.</li>
           <li>Communicate about account, verification, and service updates.</li>
@@ -30,7 +34,7 @@ function PrivacyPolicy() {
         </ul>
 
         <h2>Legal Bases (EEA/UK)</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Contract: to provide requested services.</li>
           <li>Legitimate interests: to secure, operate, and improve our platform.</li>
           <li>Consent: for certain cookies/marketing where required.</li>
@@ -38,7 +42,7 @@ function PrivacyPolicy() {
         </ul>
 
         <h2>Sharing and Disclosure</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Service providers: hosting, analytics, payment processing, email delivery.</li>
           <li>Hostel partners: limited data necessary to manage a booking.</li>
           <li>Legal: to respond to lawful requests or protect rights and safety.</li>
@@ -52,7 +56,7 @@ function PrivacyPolicy() {
         <p>We use administrative, technical, and organizational measures to protect data (e.g., encryption in transit, access controls). No method is 100% secure.</p>
 
         <h2>Your Rights</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Access, correction, deletion, and portability of your data.</li>
           <li>Object to or restrict certain processing.</li>
           <li>Withdraw consent where processing is based on consent.</li>
@@ -70,6 +74,7 @@ function PrivacyPolicy() {
 
         <h2>Changes to this Policy</h2>
         <p>We may update this Policy. Material changes will be communicated via the app or email where appropriate.</p>
+        </div>
       </div>
       <Footer />
     </>

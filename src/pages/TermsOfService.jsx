@@ -1,33 +1,37 @@
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import "../assets/css/Legal.css";
 
 function TermsOfService() {
   return (
     <>
       <NavBar />
-      <div className="document_container" style={{ paddingTop: 90, paddingBottom: 40, maxWidth: 1000, margin: "0 auto", paddingLeft: 16, paddingRight: 16 }}>
-        <h1 style={{ marginBottom: 12 }}>Terms of Service</h1>
-        <p style={{ marginBottom: 16 }}>Last updated: {new Date().toLocaleDateString()}</p>
+      <div className="legal-container">
+        <div className="legal-hero">
+          <h1 className="legal-title">Terms of Service</h1>
+          <p className="legal-updated">Last updated: {new Date().toLocaleDateString()}</p>
+        </div>
 
+        <div className="legal-card">
         <h2>Agreement to Terms</h2>
         <p>By accessing or using HostelHQ, you agree to be bound by these Terms. If you do not agree, do not use the service.</p>
 
         <h2>Accounts</h2>
-        <ul>
+        <ul className="legal-list">
           <li>You must provide accurate information and keep your account secure.</li>
           <li>You are responsible for activities under your account.</li>
           <li>We may suspend or terminate accounts that violate these Terms.</li>
         </ul>
 
         <h2>Use of the Service</h2>
-        <ul>
+        <ul className="legal-list">
           <li>Do not misuse the platform, interfere with its operation, or attempt unauthorized access.</li>
           <li>Do not post unlawful, misleading, or infringing content.</li>
           <li>We may modify or discontinue features at any time.</li>
         </ul>
 
         <h2>Listings and Bookings</h2>
-        <ul>
+        <ul className="legal-list">
           <li>We aggregate hostel listings. Availability, amenities, and prices are provided by partners and may change.</li>
           <li>Booking terms (cancellations, deposits) are defined by the hostel partner.</li>
           <li>We are not a property manager or broker; we facilitate discovery and booking.</li>
@@ -56,6 +60,7 @@ function TermsOfService() {
 
         <h2>Contact</h2>
         <p>For questions about these Terms, contact: legal@hosttels.com</p>
+        </div>
       </div>
       <Footer />
     </>
