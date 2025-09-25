@@ -6,7 +6,7 @@ import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 import { checkResponseForUnverifiedAccount, handleUnverifiedAccount } from "../../utils/authUtils";
 import { ChevronLeft, ChevronRight, Building2, Star, Users, MapPin } from "lucide-react";
 
-function CategoryHostel() {
+function CategoryHostel({ externalHostels }) {
   const [hostels_data, setHostelsData] = useState([]);
   const [groupedHostels, setGroupedHostels] = useState({});
   const scrollContainerRefs = useRef({});
@@ -67,6 +67,15 @@ function CategoryHostel() {
     return grouped;
   };
 
+  // When externalHostels are provided (from Hostels page search), use them directly
+  useEffect(() => {
+    if (Array.isArray(externalHostels) && externalHostels.length > 0) {
+      setHostelsData(externalHostels);
+      const grouped = groupHostelsByCategory(externalHostels);
+      setGroupedHostels(grouped);
+    }
+  }, [externalHostels]);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
@@ -108,8 +117,11 @@ function CategoryHostel() {
       }
     }
 
-    getHostels(); // Call the function when component mounts
-  }, [navigate]);
+    // Only fetch when no external hostels provided
+    if (!Array.isArray(externalHostels) || externalHostels.length === 0) {
+      getHostels(); // Call the function when component mounts
+    }
+  }, [navigate, externalHostels]);
 
   
   

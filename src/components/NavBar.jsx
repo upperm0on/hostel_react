@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Building2, User, Menu, X, LogOut, Search } from "lucide-react";
+import { Building2, User, Menu, X, LogOut } from "lucide-react";
 import "../assets/css/NavBar.css";
 import LogoutConfirm from "./LogoutConf";
-import { useNavigate } from "react-router-dom";
-import { buildApiUrl, API_ENDPOINTS } from "../config/api";
+import { } from "react-router-dom";
 
 function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [username, setUsername] = useState(localStorage.getItem("name"));
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const navigate = useNavigate();
 
   // Keep state in sync with localStorage changes
   useEffect(() => {
@@ -43,60 +39,6 @@ function NavBar() {
     setIsMobileMenuOpen(false);
   };
 
-  const safelyParseAmenities = (value) => {
-    try {
-      if (!value) return [];
-      if (Array.isArray(value)) return value;
-      if (typeof value === "string") {
-        const trimmed = value.trim();
-        if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
-          const parsed = JSON.parse(trimmed);
-          return Array.isArray(parsed) ? parsed : [];
-        }
-        return trimmed
-          .split(",")
-          .map((v) => v.trim())
-          .filter(Boolean);
-      }
-      return [];
-    } catch {
-      return [];
-    }
-  };
-
-  const handleSearchSubmit = async (e) => {
-    e.preventDefault();
-    const query = searchText.trim().toLowerCase();
-    if (!query) return;
-    setIsSearching(true);
-
-    try {
-      // Use locally cached hostels; fall back to empty array
-      const cached = (() => {
-        try {
-          return JSON.parse(localStorage.getItem("all_hostels")) || [];
-        } catch {
-          return [];
-        }
-      })();
-
-      const filtered = (Array.isArray(cached) ? cached : []).filter((h) => {
-        const nameMatch = (h?.name || "").toLowerCase().includes(query);
-        const campusMatch = (h?.campus?.campus || "").toLowerCase().includes(query);
-        const amenities = safelyParseAmenities(h?.additional_details);
-        const amenitiesMatch = amenities.some((a) => a.toLowerCase().includes(query));
-        return nameMatch || campusMatch || amenitiesMatch;
-      });
-
-      localStorage.setItem("search_data", JSON.stringify({ data: filtered }));
-      navigate("/detailed_search");
-    } catch (err) {
-      console.error("Navbar search failed:", err);
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
   return (
     <>
       <nav className="navbar">
@@ -109,20 +51,6 @@ function NavBar() {
 
           {/* Desktop Navigation */}
           <div className="nav-desktop">
-            <form className="nav-search" onSubmit={handleSearchSubmit} role="search">
-              <input
-                type="text"
-                className="nav-search-input"
-                placeholder="Search hostels or amenities"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                aria-label="Search hostels"
-              />
-              <button className="nav-search-btn" type="submit" disabled={isSearching}>
-                <Search size={16} />
-                <span>{isSearching ? "Searching..." : "Search"}</span>
-              </button>
-            </form>
             <ul className="nav-links">
               <li className="nav-links-item">
                 <Link to="/hostels" className="nav-link">
@@ -188,20 +116,6 @@ function NavBar() {
           </div>
           
           <div className="drawer-body">
-            <form className="drawer-search" onSubmit={(e) => { handleSearchSubmit(e); closeMobileMenu(); }} role="search">
-              <input
-                type="text"
-                className="drawer-search-input"
-                placeholder="Search hostels or amenities"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                aria-label="Search hostels"
-              />
-              <button className="drawer-search-btn" type="submit" disabled={isSearching}>
-                <Search size={16} />
-                <span>{isSearching ? "Searching..." : "Search"}</span>
-              </button>
-            </form>
             <div className="drawer-menu">
               <div className="drawer-menu-item">
                 <Link to="/hostels" className="drawer-menu-link" onClick={closeMobileMenu}>
