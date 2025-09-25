@@ -94,6 +94,11 @@ function CategoryHostel() {
         const hostels = await response.json();
         console.log("Hostel Data:", hostels);
         setHostelsData(hostels); // Store in state
+        try {
+          localStorage.setItem('all_hostels', JSON.stringify(hostels));
+        } catch (e) {
+          console.warn('Unable to cache hostels locally:', e);
+        }
         
         // Group hostels by category
         const grouped = groupHostelsByCategory(hostels);
