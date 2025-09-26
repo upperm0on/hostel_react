@@ -3,7 +3,7 @@ import { CANONICAL_URL, OG_IMAGE_URL, DEFAULT_META, SITE_URL } from '../../confi
 
 function setMetaTag(name, content, attr = 'name') {
   if (!content) return;
-  let el = document.head.querySelector(`${attr}="${name}"`);
+  let el = document.head.querySelector(`meta[${attr}="${name}"]`);
   if (!el) {
     el = document.createElement('meta');
     el.setAttribute(attr, name);
