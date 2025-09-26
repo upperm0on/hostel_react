@@ -24,6 +24,7 @@ import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 
 import DetailedSearch from './pages/DetailedSearch'
+import HostelDetail from './pages/HostelDetail'
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Landingpage />} />
         <Route path='/hostels' element={<Hostels />} />
+        <Route path='/hostels/:slugOrId' element={<HostelDetail />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />

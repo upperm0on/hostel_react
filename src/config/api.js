@@ -5,7 +5,7 @@
 const getBaseURL = () => {
   // If VITE_API_BASE_URL is set, use it; otherwise use relative paths
   // This allows for easy switching between development and production
-  return '';
+  return import.meta.env.VITE_API_BASE_URL || '';
 };
 
 // API endpoints configuration

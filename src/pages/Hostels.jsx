@@ -5,6 +5,8 @@ import NavBar from "../components/NavBar";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import "../assets/css/hostel/CategoryHostel.css";
+import SEO from "../components/seo/SEO";
+import { SITE_URL } from "../config/site";
 
 function Hostels() {
     const [q, setQ] = useState("");
@@ -41,6 +43,12 @@ function Hostels() {
 
     return (
         <>
+            <SEO
+                title="Browse Hostels | Hosttelz"
+                description="Explore and search affordable hostels by name, campus, and amenities on Hosttelz."
+                canonical={`${SITE_URL}/hostels`}
+                url={`${SITE_URL}/hostels`}
+            />
             <NavBar />
             <div className="hostels_main_container" style={{paddingTop: 90}}>
                 <div className="hostels_header">

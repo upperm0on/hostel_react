@@ -2,6 +2,8 @@ import NavBar from "../components/NavBar";
 import CardContainer from "../components/landingpage/CardContainer";
 import Footer from "../components/Footer";
 import { buildApiUrl, API_ENDPOINTS } from "../config/api";
+import SEO from "../components/seo/SEO";
+import { SITE_URL, DEFAULT_META } from "../config/site";
 
 
 function Landingpage() {
@@ -27,6 +29,13 @@ function Landingpage() {
     
   return (
     <>
+      <SEO
+        title={DEFAULT_META.title}
+        description={DEFAULT_META.description}
+        keywords={DEFAULT_META.keywords}
+        canonical={SITE_URL}
+        url={SITE_URL}
+      />
       <NavBar />
       <CardContainer />
       <Footer />
