@@ -1,77 +1,71 @@
 import RoomCard from "./RoomCard";
 import { Building2, BarChart3, Users, MapPin, Sparkles } from "lucide-react";
 import "../../assets/css/dashboard/HostelCard.css";
+import { buildMediaUrl } from "../../config/api";
 
 function HostelCard() {
-  const hostel = JSON.parse(localStorage.getItem("information"));
-  // Get booked room
-  const bookedRoom = localStorage.getItem("room_booked");
+  const hostel = JSON.parse(localStorage.getItem("information") || "{}");
+  const additionalDetails = Array.isArray(hostel?.additional_details)
+    ? hostel.additional_details
+    : [];
 
-
-  // Parse room details properly
-  const room_details_parsed = Array.isArray(hostel.room_details)
-    ? hostel.room_details
-    : (typeof hostel.room_details === 'string'
-        ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
-        : []);
-
-  const cleanedBookedRoom = bookedRoom.replace(/"/g, ""); // removes extra quotes
-
-  let passing_room = null;
-
-  room_details_parsed.forEach((room) => {
-    // Try to match by UUID first, then fall back to number_in_room for backward compatibility
-    if (room.uuid === cleanedBookedRoom || String(room.number_in_room) === cleanedBookedRoom) {
-      passing_room = room;
-    }
-  });
-
-  // Safe parsing for additional_details
-  let additionalDetails = [];
-  if (hostel.additional_details) {
-    // If it's already an array, use it directly
-    if (Array.isArray(hostel.additional_details)) {
-      additionalDetails = hostel.additional_details;
-    } else if (typeof hostel.additional_details === 'string') {
-      // Try parsing as JSON first
-      try {
-        const parsed = JSON.parse(hostel.additional_details);
-        additionalDetails = Array.isArray(parsed) ? parsed : [];
-      } catch {
-        // If JSON parsing fails, try splitting comma-separated string
-        additionalDetails = hostel.additional_details.split(',').map(item => item.trim()).filter(item => item);
+  // Normalize hostel.image: support array/JSON/CSV and strip leading '/https://'
+  const parseFirstImage = (val) => {
+    try {
+      if (Array.isArray(val)) return (val[0] || "").toString().trim();
+      if (typeof val === "string") {
+        const s = val.trim();
+        if (!s) return "";
+        if (s.startsWith("[")) {
+          const arr = JSON.parse(s);
+          if (Array.isArray(arr)) return (arr[0] || "").toString().trim();
+        }
+        if (s.includes(",")) {
+          const first = s.split(",").map(t => t.trim()).find(Boolean);
+          return first || "";
+        }
+        return s;
       }
+      return "";
+    } catch {
+      return typeof val === "string" ? val.split(",")[0].trim() : "";
     }
-  }
+  };
 
-  const base_url = "/";
+  let hostelImage = parseFirstImage(hostel?.image);
+  // Fix '/https://...' edge case
+  hostelImage = String(hostelImage).trim().replace(/^\/+((?:https?:)?\/\/)/i, '$1');
+  // If absolute or protocol-relative, use as-is; else build with base
+  const imgSrc = /^(?:https?:)?\/\//i.test(hostelImage)
+    ? (hostelImage.startsWith('http') ? hostelImage : `https:${hostelImage}`)
+    : buildMediaUrl(hostelImage);
+
+  // Final guard: strip any accidental leading slash before a scheme
+  const finalSrc = String(imgSrc).replace(/^\/+((?:https?:)?\/\/)/i, '$1');
 
   return (
     <div className="dashboard_card">
-      {/* Image */}
       <div className="image">
-        <img src={base_url + hostel.image} alt={hostel.name} />
+        <img src={hostel.image} alt={hostel?.name || "Hostel"} />
         <div className="hostel_location">
           <MapPin size={16} />
-          {hostel.campus?.campus || "Unknown Campus"}
+          {hostel?.campus?.campus || "Unknown Campus"}
         </div>
       </div>
 
-      {/* Hostel Details */}
       <div className="hostel_details">
         <ul className="details_hostel">
           <li className="details_hostel_item">
-            <strong><Building2 size={16} /> Hostel:</strong> {hostel.name}
+            <strong><Building2 size={16} /> Hostel:</strong> {hostel?.name || "—"}
           </li>
           <li className="details_hostel_item">
-            <strong><BarChart3 size={16} /> Status:</strong> {hostel.status}
+            <strong><BarChart3 size={16} /> Status:</strong> {hostel?.status || "—"}
           </li>
           <li className="details_hostel_item">
-            <strong><Users size={16} /> Gender Type:</strong> {hostel.gender_type}
+            <strong><Users size={16} /> Gender Type:</strong> {hostel?.gender_type || "—"}
           </li>
         </ul>
 
-        {/* Additional Details */}
         <div className="grided-content">
           {additionalDetails.length > 0 && (
             <div className="additional_details">
@@ -83,7 +77,6 @@ function HostelCard() {
               </ul>
             </div>
           )}
-
         </div>
       </div>
     </div>

@@ -1,12 +1,20 @@
 import "../../assets/css/hostel/DetailRoom.css";
-import { buildApiUrl, buildMediaUrl, API_ENDPOINTS } from "../../config/api";
+import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban } from "lucide-react";
+
+// Helper to slugify hostel names for path segments
+const slugify = (str) =>
+  String(str || "")
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '') // remove diacritics
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 function DetailRoom({ room_details, hostel }) {
   // Safely parse amenities - could be JSON array or comma-separated string
   const amenities = (() => {
     try {
-      // Try parsing as JSON first
       if (typeof room_details.amenities === 'string' && room_details.amenities.trim().startsWith('[')) {
         return JSON.parse(room_details.amenities);
       }
@@ -29,7 +37,36 @@ function DetailRoom({ room_details, hostel }) {
 
   const isRoomAvailable = Boolean(room_details.room_available);
 
-  const base_image_url = buildMediaUrl("/media/room_images");
+  const hostelSlug = slugify(hostel?.name);
+  // Normalize room image: support array, JSON string, or comma-separated string
+  const parseFirstImage = (val) => {
+    try {
+      if (Array.isArray(val)) return (val[0] || "").trim();
+      if (typeof val === "string") {
+        const s = val.trim();
+        if (!s) return "";
+        if (s.startsWith("[")) {
+          const arr = JSON.parse(s);
+          if (Array.isArray(arr)) return (arr[0] || "").toString().trim();
+        }
+        if (s.includes(",")) {
+          const first = s.split(",").map(t => t.trim()).find(Boolean);
+          return first || "";
+        }
+        return s;
+      }
+      return "";
+    } catch {
+      return typeof val === "string" ? val.split(",")[0].trim() : "";
+    }
+  };
+
+  const roomImage = parseFirstImage(room_details?.room_image);
+  const roomImageSrc = /^https?:\/\//i.test(String(roomImage))
+    ? roomImage
+    : (roomImage
+        ? `https://hosttelz.s3.eu-north-1.amazonaws.com/room_images/${hostelSlug}/${room_details.number_in_room}/${roomImage}`
+        : "");
 
   const token = localStorage.getItem("token");
   const handlePayment = async () => {
@@ -79,7 +116,7 @@ function DetailRoom({ room_details, hostel }) {
     <div className="room-card">
       <div className="room-image-container">
         <img
-          src={room_details.room_image ? `${base_image_url}/${hostel.name}/${room_details.number_in_room}/${room_details.room_image}` : "/images/room1.png"}
+          src={roomImage ? roomImageSrc : "/images/room1.png"}
           alt="room_image"
         />
         <div className="room-badge">

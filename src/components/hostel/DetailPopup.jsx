@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "../../assets/css/hostel/DetailPopup.css";
 import DetailRoom from "./DetailRoom";
 import { X, Star, MapPin, Wifi, Car, Shield, Utensils, Dumbbell, Users, Phone, Mail } from "lucide-react";
+import { buildMediaUrl } from "../../config/api";
 
 function DetailPopup({ hostel, open, onClose }) {
   if (!hostel || !open) return null;
@@ -54,7 +55,7 @@ function DetailPopup({ hostel, open, onClose }) {
         <div className="hostel_details">
           <div className="image_section">
             <img
-              src={"/" + hostel.image || "#"}
+              src={buildMediaUrl(hostel.image || "")}
               alt={hostel.name || "Hostel"}
             />
             <div className="image_overlay">

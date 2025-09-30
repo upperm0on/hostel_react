@@ -30,8 +30,16 @@ function HostelCard({ hostel }) {
 
   const room_details = normalizeRooms(hostel.room_details);
 
-  const base_image_url = '/'
-  
+  // Handle image URL construction
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/hostel4.png";
+    // If it's already an absolute URL or starts with http, use as is
+    if (imagePath.startsWith('http')) return imagePath;
+    // If it starts with a slash, remove it to prevent double slashes
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `/${cleanPath}`;
+  };
+
   return (
     <>
       <DetailPopup
@@ -43,7 +51,7 @@ function HostelCard({ hostel }) {
       <div className={`hostel_card ${hostel.is_available === false || hostel.status !== 'Available' ? 'not-available' : ''}`} onClick={() => setOpen(true)}>
         <div className="card-img-container">
           <img
-            src={base_image_url + hostel?.image || "/images/hostel4.png"}
+            src={getImageUrl(hostel?.image)}
             alt={hostel?.name || "Hostel image"}
           />
           <div className="card-overlay">

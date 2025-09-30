@@ -21,7 +21,7 @@ try {
 }
 
 const SITE_URL = process.env.VITE_SITE_URL || 'https://hosttelz.com';
-const API_BASE_URL = process.env.VITE_API_BASE_URL || '';
+const API_BASE_URL = process.env.VITE_API_BASE_URL || 'http://localhost:8000';
 const HOSTELS_ENDPOINT = '/hq/api/hostels/';
 
 async function fetchHostels() {
