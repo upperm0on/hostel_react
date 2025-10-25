@@ -1,6 +1,7 @@
 import "../../assets/css/hostel/DetailRoom.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
-import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban } from "lucide-react";
+import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban, Wrench, CalendarCheck, RotateCcw } from "lucide-react";
+import { getRoomAvailabilityStatus } from "../../utils/availabilityUtils";
 
 // Helper to slugify hostel names for path segments
 const slugify = (str) =>
@@ -11,7 +12,12 @@ const slugify = (str) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-function DetailRoom({ room_details, hostel }) {
+function DetailRoom({ room_details, hostel, onReservationClick }) {
+  // Check if user has an existing reservation
+  const hasExistingReservation = () => {
+    const reservationData = localStorage.getItem("reservation_data");
+    return reservationData && reservationData !== "null" && reservationData !== "{}";
+  };
   // Safely parse amenities - could be JSON array or comma-separated string
   const amenities = (() => {
     try {
@@ -35,7 +41,9 @@ function DetailRoom({ room_details, hostel }) {
 
   const genderKeys = Object.keys(room_details.gender);
 
-  const isRoomAvailable = Boolean(room_details.room_available);
+  // Get room availability status
+  const roomAvailabilityStatus = getRoomAvailabilityStatus(room_details, hostel);
+  const isRoomAvailable = roomAvailabilityStatus.isAvailable;
 
   const hostelSlug = slugify(hostel?.name);
   // Normalize room image: support array, JSON string, or comma-separated string
@@ -172,17 +180,43 @@ function DetailRoom({ room_details, hostel }) {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="book-room-btn"
-          onClick={handlePayment}
-          disabled={!isRoomAvailable}
-          aria-disabled={!isRoomAvailable}
-          title={isRoomAvailable ? "Book this room" : "Room not available"}
-        >
-          {isRoomAvailable ? <CreditCard size={18} /> : <Ban size={18} />}
-          <span>{isRoomAvailable ? "Book This Room" : "Not Available"}</span>
-        </button>
+        <div className="room-action-buttons">
+          {/* Only show Book Now button if hostel accepts bookings */}
+          {hostel?.accepts_bookings !== false && (
+            <button
+              type="button"
+              className="book-room-btn"
+              onClick={handlePayment}
+              disabled={!isRoomAvailable}
+              aria-disabled={!isRoomAvailable}
+              title={isRoomAvailable ? "Book this room with full payment" : `Room ${roomAvailabilityStatus.message.toLowerCase()}`}
+            >
+              {isRoomAvailable ? <CreditCard size={18} /> : (roomAvailabilityStatus.type === 'under_service' ? <Wrench size={18} /> : <Ban size={18} />)}
+              <span>{isRoomAvailable ? "Book Now" : roomAvailabilityStatus.message}</span>
+            </button>
+          )}
+          
+          {hostel?.accepts_bookings !== false && (
+            <button
+              type="button"
+              className={`reserve-room-btn ${hasExistingReservation() ? 'change-reservation' : ''}`}
+              onClick={() => onReservationClick && onReservationClick(room_details)}
+              disabled={!isRoomAvailable}
+              aria-disabled={!isRoomAvailable}
+              title={isRoomAvailable ? (hasExistingReservation() ? "Change your reservation (no refund)" : "Reserve this room with deposit") : `Room ${roomAvailabilityStatus.message.toLowerCase()}`}
+            >
+              {isRoomAvailable ? (hasExistingReservation() ? <RotateCcw size={18} /> : <CalendarCheck size={18} />) : (roomAvailabilityStatus.type === 'under_service' ? <Wrench size={18} /> : <Ban size={18} />)}
+              <span>{isRoomAvailable ? (hasExistingReservation() ? "Change Reservation" : "Reserve Room") : roomAvailabilityStatus.message}</span>
+            </button>
+          )}
+          
+          {hostel?.accepts_bookings === false && (
+            <div className="booking-disabled-notice">
+              <Ban size={18} />
+              <span>Online booking is currently disabled for this hostel</span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

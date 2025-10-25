@@ -25,6 +25,19 @@
     pointer-events: none;
 }
 
+.details_side {
+    max-width: 500px;
+    width: 100%;
+}
+
+.hostel_side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
 /* Responsive dashboard layout */
 @media (max-width: 768px) {
     .hostel_dashboard_space {

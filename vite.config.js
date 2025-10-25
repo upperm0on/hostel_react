@@ -10,7 +10,7 @@ export default defineConfig({
     cors: true,
     allowedHosts: true,             // allow cross-origin
     hmr: {
-      clientPort: 443       // needed for ngrok HTTPS tunnel
+      port: 5173       // use same port for HMR
     }
   }
 })

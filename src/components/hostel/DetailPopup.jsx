@@ -1,18 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../../assets/css/hostel/DetailPopup.css";
 import DetailRoom from "./DetailRoom";
 import { X, Star, MapPin, Wifi, Car, Shield, Utensils, Dumbbell, Users, Phone, Mail } from "lucide-react";
 import { buildMediaUrl } from "../../config/api";
+import { getHostelAvailabilityStatus } from "../../utils/availabilityUtils";
 
-function DetailPopup({ hostel, open, onClose }) {
-  if (!hostel || !open) return null;
-
+function DetailPopup({ hostel, open, onClose, onReservationClick }) {
   // Close on ESC
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  if (!hostel || !open) return null;
 
   // Safely parse room details
   const room_details = Array.isArray(hostel.room_details)
@@ -43,6 +44,9 @@ function DetailPopup({ hostel, open, onClose }) {
     }
   })();
   
+  // Get hostel availability status
+  const availabilityStatus = getHostelAvailabilityStatus(hostel);
+  
   return (
     <div className="detail_popup_backdrop" onClick={onClose}>
       <div className="detail_popup" onClick={(e) => e.stopPropagation()}>
@@ -55,7 +59,7 @@ function DetailPopup({ hostel, open, onClose }) {
         <div className="hostel_details">
           <div className="image_section">
             <img
-              src={buildMediaUrl(hostel.image || "")}
+              src={hostel.image ? buildMediaUrl(hostel.image) : '/images/hostel4.png'}
               alt={hostel.name || "Hostel"}
             />
             <div className="image_overlay">
@@ -113,17 +117,26 @@ function DetailPopup({ hostel, open, onClose }) {
             <div className="rooms_section">
               <h3 className="section_title">
                 <Users size={20} className="section_icon" />
-                Available Rooms
+                {availabilityStatus.isAvailable ? 'Available Rooms' : 'Rooms'}
+                {!availabilityStatus.isAvailable && (
+                  <span className="availability_status"> - {availabilityStatus.message}</span>
+                )}
               </h3>
               <div className="rooms_list">
                 {room_details.map((detail) => (
-                  <DetailRoom key={detail.uuid || detail.number_in_room} room_details={detail} hostel={hostel} />
+                  <DetailRoom 
+                    key={detail.uuid || detail.number_in_room} 
+                    room_details={detail} 
+                    hostel={hostel}
+                    onReservationClick={onReservationClick}
+                  />
                 ))}
               </div>
             </div>
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

@@ -1,10 +1,17 @@
 import { useState } from "react";
 import "../../assets/css/hostel/HostelCard.css";
 import DetailPopup from "./DetailPopup";
-import { Star, Users, MapPin, Eye, AlertTriangle } from "lucide-react";
+import SimpleReservationModal from "../reservation/SimpleReservationModal";
+import ReviewsModal from "../dashboard/ReviewsModal";
+import { buildMediaUrl } from "../../config/api";
+import { Star, Users, MapPin, Eye, AlertTriangle, Wrench, CheckCircle, Ban, HelpCircle, MessageSquare } from "lucide-react";
+import { getHostelAvailabilityStatus, getAvailabilityIcon } from "../../utils/availabilityUtils";
 
 function HostelCard({ hostel }) {
   const [open, setOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
 
   // Make sure room_details exists and is an array
   const normalizeRooms = (value) => {
@@ -29,15 +36,41 @@ function HostelCard({ hostel }) {
   };
 
   const room_details = normalizeRooms(hostel.room_details);
+  
+  // Get hostel availability status
+  const availabilityStatus = getHostelAvailabilityStatus(hostel);
+  
+  // Get the appropriate icon component
+  const getAvailabilityIconComponent = (iconType) => {
+    const iconMap = {
+      'check': CheckCircle,
+      'ban': Ban,
+      'wrench': Wrench,
+      'alert': AlertTriangle,
+      'question': HelpCircle
+    };
+    return iconMap[iconType] || HelpCircle;
+  };
+  
+  const AvailabilityIcon = getAvailabilityIconComponent(availabilityStatus.icon);
 
   // Handle image URL construction
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/hostel4.png";
     // If it's already an absolute URL or starts with http, use as is
-    if (imagePath.startsWith('http')) return imagePath;
-    // If it starts with a slash, remove it to prevent double slashes
-    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-    return `/${cleanPath}`;
+    if (typeof imagePath === 'string' && /^(?:https?:)?\/\//i.test(imagePath)) return imagePath;
+    // otherwise build media url (this will respect VITE_API_BASE_URL)
+    try { return buildMediaUrl(imagePath); } catch { return imagePath; }
+  };
+
+  const handleReservationClick = (roomDetails) => {
+    setSelectedRoom(roomDetails);
+    setIsReservationModalOpen(true);
+  };
+
+  const handleReservationClose = () => {
+    setIsReservationModalOpen(false);
+    setSelectedRoom(null);
   };
 
   return (
@@ -46,33 +79,69 @@ function HostelCard({ hostel }) {
         hostel={hostel}
         open={open}
         onClose={() => setOpen(false)}
+        onReservationClick={handleReservationClick}
       />
 
-      <div className={`hostel_card ${hostel.is_available === false || hostel.status !== 'Available' ? 'not-available' : ''}`} onClick={() => setOpen(true)}>
+      <SimpleReservationModal
+        isOpen={isReservationModalOpen}
+        onClose={handleReservationClose}
+        roomDetails={selectedRoom}
+        hostel={hostel}
+      />
+
+      <ReviewsModal
+        isOpen={isReviewsModalOpen}
+        onClose={() => setIsReviewsModalOpen(false)}
+        hostelId={hostel?.id}
+        hostelName={hostel?.name}
+      />
+
+      <div className={`hostel_card ${!availabilityStatus.isAvailable ? 'not-available' : ''}`} onClick={() => setOpen(true)} role="button" tabIndex={0} onKeyDown={(e)=> { if(e.key === 'Enter') setOpen(true); }}>
         <div className="card-img-container">
           <img
             src={getImageUrl(hostel?.image)}
             alt={hostel?.name || "Hostel image"}
           />
           <div className="card-overlay">
-            <div className="view-details">
-              <Eye size={20} />
-              <span>View Details</span>
-            </div>
-            {(hostel.is_available === false || hostel.status !== 'Available') && (
-              <div className="availability_badge" aria-label="Hostel not available">
-                <AlertTriangle size={16} className="availability_icon" />
-                <span className="availability_text">Not Available</span>
+            {!availabilityStatus.isAvailable && (
+              <div className={`availability_badge ${availabilityStatus.type}`} aria-label={`Hostel ${availabilityStatus.message.toLowerCase()}`}>
+                <AvailabilityIcon size={16} className="availability_icon" />
+                <span className="availability_text">{availabilityStatus.message}</span>
               </div>
             )}
+            {hostel?.accepts_bookings === false && (
+              <div className="booking_disabled_badge" aria-label="Online booking disabled">
+                <Ban size={16} className="booking_disabled_icon" />
+                <span className="booking_disabled_text">Booking Disabled</span>
+              </div>
+            )}
+            <div style={{display:'flex', justifyContent:'center', width:'100%'}}>
+              <div className="view-details">
+                <Eye size={18} />
+                <span>View Details</span>
+              </div>
+            </div>
           </div>
         </div>
         <div className="hostel_details">
           <div className="hostel_header">
             <h3 className="hostel_name">{hostel?.name || "Unknown Hostel"}</h3>
-            <div className="rating">
-              <Star size={16} className="star-icon" />
-              <span>{hostel?.rating ?? "N/A"}</span>
+            <div className="hostel_actions">
+              <div className="rating">
+                <Star size={16} className="star-icon" />
+                <span>{hostel?.ratings ?? "N/A"}</span>
+              </div>
+              <button 
+                className="reviews-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsReviewsModalOpen(true);
+                }}
+                title="View Reviews"
+              >
+                <MessageSquare size={16} />
+                <span>Reviews</span>
+              </button>
             </div>
           </div>
           <div className="hostel_info">

@@ -105,6 +105,7 @@ function CategoryHostel({ externalHostels }) {
         setHostelsData(hostels); // Store in state
         try {
           localStorage.setItem('all_hostels', JSON.stringify(hostels));
+          localStorage.setItem('all_hostels_timestamp', Date.now().toString());
         } catch (e) {
           console.warn('Unable to cache hostels locally:', e);
         }

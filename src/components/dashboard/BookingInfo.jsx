@@ -1,4 +1,5 @@
 import { ClipboardList, Calendar, CheckCircle, Building2, AlertTriangle } from 'lucide-react';
+import './BookingInfo.css';
 
 function BookingInfo() {
   // Get hostel information from localStorage
@@ -47,9 +48,13 @@ function BookingInfo() {
         <p>
           <span className="font-medium"><Calendar size={16} /> Booking Date:</span> {bookingDate}
         </p>
-        <p>
-          <span className="font-medium"><CheckCircle size={16} /> Status:</span> Confirmed
-        </p>
+        <div className="status-container">
+          <span className="font-medium"><CheckCircle size={16} /> Status:</span>
+          <span className="reserved-status">
+            <span className="status-badge">RESERVED</span>
+            <span className="status-pulse"></span>
+          </span>
+        </div>
         <p>
           <span className="font-medium"><Building2 size={16} /> Hostel:</span> {hostel.name}
         </p>

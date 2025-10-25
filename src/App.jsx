@@ -4,6 +4,7 @@ import Landingpage from './pages/Landingpage'
 import Hostels from './pages/Hostels'
 import SignUp from './pages/SignUp'
 import Login from './pages/Login'
+import LoginPrompt from './pages/LoginPrompt'
 import Dashboard from './pages/Dashboard'
 import EmailVerification from './pages/EmailVerification'
 import VerifyEmail from './pages/VerifyEmail'
@@ -22,22 +23,33 @@ import Disclaimer from './pages/Disclaimer'
 import { Route, Routes } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import { useEffect, useState } from 'react'
 
 import DetailedSearch from './pages/DetailedSearch'
 import HostelDetail from './pages/HostelDetail'
 
 function App() {
+  const [token, setToken] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('token') : null));
+
+  useEffect(() => {
+    const handleAuthChange = () => setToken(localStorage.getItem('token'));
+    window.addEventListener('storage', handleAuthChange);
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('storage', handleAuthChange);
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+  }, []);
 
   return (
     <>
       <Routes>
-        <Route path='/' element={<Landingpage />} />
-        <Route path='/hostels' element={<Hostels />} />
-        <Route path='/hostels/:slugOrId' element={<HostelDetail />} />
+        {/* Public routes - accessible without authentication */}
+        <Route path='/' element={token ? <Landingpage /> : <LoginPrompt />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/detailed_search' element={<DetailedSearch />} />
+        <Route path='/login-prompt' element={<LoginPrompt />} />
         <Route path='/email-verification' element={<EmailVerification />} />
         <Route path='/verify-email/:token' element={<VerifyEmail />} />
         <Route path='/student-resources' element={<StudentResources />} />
@@ -51,6 +63,28 @@ function App() {
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/cookie-policy' element={<CookiePolicy />} />
         <Route path='/disclaimer' element={<Disclaimer />} />
+        
+        {/* Protected routes - require authentication */}
+        <Route path='/hostels' element={
+          <ProtectedRoute>
+            <Hostels />
+          </ProtectedRoute>
+        } />
+        <Route path='/hostels/:slugOrId' element={
+          <ProtectedRoute>
+            <HostelDetail />
+          </ProtectedRoute>
+        } />
+        <Route path='/dashboard' element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path='/detailed_search' element={
+          <ProtectedRoute>
+            <DetailedSearch />
+          </ProtectedRoute>
+        } />
       </Routes>
     </>
   )

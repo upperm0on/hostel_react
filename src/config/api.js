@@ -5,7 +5,7 @@
 const getBaseURL = () => {
   // If VITE_API_BASE_URL is set, use it; otherwise default to local API server
   // This ensures absolute URLs in development without requiring env setup
-  return import.meta.env.VITE_API_BASE_URL || '';
+  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 };
 
 // API endpoints configuration
@@ -25,6 +25,17 @@ export const API_ENDPOINTS = {
   PAYMENTS: '/hq/api/payments/',
   PAYMENT_VERIFY: '/hq/api/payments/verify/',
   CONSUMER_REQUEST: '/hq/api/payments/consumer_request/',
+  
+  // Reservation endpoints
+  RESERVATIONS_CREATE: '/hq/api/reservations/create/',
+  RESERVATIONS_LIST: '/hq/api/reservations/list/',
+  RESERVATIONS_DELETE: '/hq/api/reservations/delete/',
+  RESERVATIONS_PAYMENT_INITIATE: '/hq/api/reservations/payment/initiate/',
+  RESERVATIONS_PAYMENT_VERIFY: '/hq/api/reservations/payment/verify/',
+  
+  // Review endpoints
+  REVIEWS_CREATE: '/hq/api/reviews/create/',
+  REVIEWS_GET: '/hq/api/reviews/',
   
   // Media endpoints
   MEDIA_BASE: '/media/',

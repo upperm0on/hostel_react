@@ -1,5 +1,6 @@
+import React from 'react';
 import RoomCard from "./RoomCard";
-import { Building2, BarChart3, Users, MapPin, Sparkles } from "lucide-react";
+import { Building2, BarChart3, Users, MapPin, Sparkles, Star } from "lucide-react";
 import "../../assets/css/dashboard/HostelCard.css";
 import { buildMediaUrl } from "../../config/api";
 
@@ -46,7 +47,13 @@ function HostelCard() {
   return (
     <div className="dashboard_card">
       <div className="image">
-        <img src={hostel.image} alt={hostel?.name || "Hostel"} />
+        <img 
+          src={hostel.image ? finalSrc : '/images/hostel1.png'} 
+          alt={hostel?.name || "Hostel"} 
+          onError={(e) => {
+            e.target.src = '/images/hostel1.png'; // Fallback image
+          }}
+        />
         <div className="hostel_location">
           <MapPin size={16} />
           {hostel?.campus?.campus || "Unknown Campus"}
@@ -64,6 +71,9 @@ function HostelCard() {
           <li className="details_hostel_item">
             <strong><Users size={16} /> Gender Type:</strong> {hostel?.gender_type || "—"}
           </li>
+          <li className="details_hostel_item">
+            <strong><Star size={16} /> Rating:</strong> {hostel?.ratings || "—"}
+          </li>
         </ul>
 
         <div className="grided-content">
@@ -77,6 +87,7 @@ function HostelCard() {
               </ul>
             </div>
           )}
+          
         </div>
       </div>
     </div>
