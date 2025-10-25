@@ -4,18 +4,19 @@ import { buildApiUrl, API_ENDPOINTS } from '../../config/api';
 import ReservationModal from './ReservationModal';
 import ChangeReservationModal from './ChangeReservationModal';
 import '../../assets/css/reservation/ReservationButton.css';
+import { useReservationData } from '../../hooks/useReservationData';
+import { useAuthData } from '../../hooks/useAuthData';
 
 function ReservationButton({ roomDetails, hostel, isAvailable, onReservationSuccess }) {
+  const { hasReservation, reservation, allReservations } = useReservationData();
+  const { token, email } = useAuthData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Check if user has an existing reservation
-  const hasExistingReservation = () => {
-    const reservationData = localStorage.getItem("reservation_data");
-    return reservationData && reservationData !== "null" && reservationData !== "{}";
-  };
+  // Check if user has an existing reservation using Redux
+  const hasExistingReservation = () => hasReservation;
 
   const handleReservationClick = () => {
     if (!isAvailable) return;
@@ -32,11 +33,13 @@ function ReservationButton({ roomDetails, hostel, isAvailable, onReservationSucc
     setIsLoading(true);
     setError(null);
 
+    if (!token) {
+      setError('Please log in to make a reservation');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Please log in to make a reservation');
-      }
 
       // Create reservation
       const createRes = await fetch(buildApiUrl(API_ENDPOINTS.RESERVATIONS_CREATE), {
@@ -96,14 +99,16 @@ function ReservationButton({ roomDetails, hostel, isAvailable, onReservationSucc
     setIsLoading(true);
     setError(null);
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Please log in to change your reservation');
-      }
+    if (!token) {
+      setError('Please log in to change your reservation');
+      setIsLoading(false);
+      return;
+    }
 
-      // Get current reservation data
-      const currentReservation = JSON.parse(localStorage.getItem("reservation_data") || "{}");
+    try {
+
+      // Get current reservation data from Redux
+      const currentReservation = reservation || {};
       
       // Create new reservation
       const createRes = await fetch(buildApiUrl(API_ENDPOINTS.RESERVATIONS_CREATE), {
@@ -136,7 +141,7 @@ function ReservationButton({ roomDetails, hostel, isAvailable, onReservationSucc
         },
         body: JSON.stringify({
           reservation_id: newReservation.id,
-          email: localStorage.getItem('email') || '',
+          email: email || '',
           deposit_percentage: 30, // 30% deposit
         }),
       });
@@ -159,13 +164,7 @@ function ReservationButton({ roomDetails, hostel, isAvailable, onReservationSucc
     }
   };
 
-  const getCurrentReservation = () => {
-    try {
-      return JSON.parse(localStorage.getItem("reservation_data") || "{}");
-    } catch {
-      return {};
-    }
-  };
+  const getCurrentReservation = () => reservation || {};
 
   return (
     <>

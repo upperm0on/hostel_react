@@ -40,6 +40,12 @@ export const API_ENDPOINTS = {
   // Media endpoints
   MEDIA_BASE: '/media/',
   ROOM_IMAGES: '/media/room_images',
+  
+  // Profile management endpoints
+  PROFILE_SWITCH: '/hq/api/profile/switch/',
+  AVAILABLE_PROFILES: '/hq/api/profile/available/',
+  MANAGER_PROFILE: '/hq/api/manager/profile/',
+  ADMIN_PROFILE: '/hq/api/admin/profile/',
 };
 
 // Helper function to build full API URLs

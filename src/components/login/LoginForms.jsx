@@ -3,12 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../assets/css/signup/SignUpForms.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { setEmailSafely } from "../../utils/authUtils";
+import { useAuthData } from "../../hooks/useAuthData";
 
 function LoginForms() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuthData();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -31,7 +34,7 @@ function LoginForms() {
         // Check if the error is due to unverified account
         if (errorData.error === "Account not verified" || errorData.account_verified === false) {
           // User needs to verify their email
-          localStorage.setItem("email", email);
+          setEmailSafely(email);
           navigate("/email-verification");
           return;
         }
@@ -42,19 +45,29 @@ function LoginForms() {
       const data = await res.json();
 
       if (data.token) {
-        // Save both token and email
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("email", email);
-        localStorage.setItem("name", data.name || email.split('@')[0]); // Use name from response or email prefix
+        // Use the auth hook to handle login
+        login({
+          token: data.token,
+          email: email,
+          user: {
+            name: data.name || email.split('@')[0],
+            email: email
+          }
+        });
+
+        setEmailSafely(email);
+        localStorage.setItem("name", data.name || email.split('@')[0]);
 
         // 🔔 Tell NavBar to update immediately
         window.dispatchEvent(new Event("authChange"));
 
-        // Redirect
-        navigate("/");
+        // Small delay to ensure Redux state is updated
+        setTimeout(() => {
+          navigate("/");
+        }, 100);
       } else if (data.requires_verification) {
         // User needs to verify their email
-        localStorage.setItem("email", email);
+        setEmailSafely(email);
         navigate("/email-verification");
       } else {
         setError("Invalid login. Please try again.");

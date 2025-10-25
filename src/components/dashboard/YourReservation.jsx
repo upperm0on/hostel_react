@@ -1,8 +1,9 @@
 import { Calendar, Clock, AlertCircle, DollarSign, Building2, Circle, MapPin } from 'lucide-react';
 import '../../assets/css/dashboard/YourReservation.css';
+import { useReservationData } from '../../hooks/useReservationData';
 
 function YourReservation() {
-  const reservationData = JSON.parse(localStorage.getItem("reservation_data") || "{}");
+  const { reservation: reservationData } = useReservationData();
   
   if (!reservationData || !reservationData.hostel) {
     return null;

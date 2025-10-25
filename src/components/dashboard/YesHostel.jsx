@@ -4,14 +4,13 @@ import ManagerInfo from "./ManagerInfo";
 import BookingInfo from "./BookingInfo";
 import YourRoom from "./YourRoom";
 import RatingReview from "./RatingReview";
+import { useHostelData } from "../../hooks/useHostelData";
 
 function YesHostel() {
-  // Check if user has a booking
-  const hasBooking = localStorage.getItem("information");
-  
-  // Get hostel information for the rating component
-  const hostelInfo = JSON.parse(localStorage.getItem("information") || "{}");
-  const hostelId = hostelInfo?.id;
+  // Get hostel data from Redux
+  const { hostel } = useHostelData();
+  const hasBooking = hostel && Object.keys(hostel).length > 0;
+  const hostelId = hostel?.id;
 
   return (
     <div className="hostel_dashboard_space">

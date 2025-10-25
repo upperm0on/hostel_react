@@ -1,10 +1,10 @@
 import { ClipboardList, Calendar, CheckCircle, Building2, AlertTriangle } from 'lucide-react';
 import './BookingInfo.css';
+import { useHostelData } from '../../hooks/useHostelData';
 
 function BookingInfo() {
-  // Get hostel information from localStorage
-  const hostelData = localStorage.getItem("information");
-  const hostel = hostelData ? JSON.parse(hostelData) : null;
+  // Get hostel information from Redux
+  const { hostel } = useHostelData();
   
   // Format checkout date
   const formatDate = (dateString) => {
@@ -50,8 +50,8 @@ function BookingInfo() {
         </p>
         <div className="status-container">
           <span className="font-medium"><CheckCircle size={16} /> Status:</span>
-          <span className="reserved-status">
-            <span className="status-badge">RESERVED</span>
+          <span className="confirmed-status">
+            <span className="status-badge">CONFIRMED</span>
             <span className="status-pulse"></span>
           </span>
         </div>

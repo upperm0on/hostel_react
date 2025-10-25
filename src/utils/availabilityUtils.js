@@ -66,12 +66,71 @@ export const getHostelAvailabilityStatus = (hostel) => {
 };
 
 /**
+ * Calculates available reservation slots for a room
+ * @param {Object} room - The room object
+ * @param {Array} reservations - Array of existing reservations for this room
+ * @returns {Object} - Availability calculation result
+ */
+export const calculateRoomAvailability = (room, reservations = []) => {
+  // Handle null or undefined room
+  if (!room) {
+    return {
+      totalCapacity: 0,
+      currentOccupants: 0,
+      reservedSlots: 0,
+      availableSlots: 0,
+      isAvailable: false,
+      occupancyRate: 0
+    };
+  }
+
+  // Get room capacity and number of rooms
+  const occupantsPerRoom = room.number_in_room || 0;
+  const numberOfRooms = room.number_of_rooms || 0;
+  const currentOccupants = room.current_occupants || 0;
+  
+  // Calculate total capacity
+  const totalCapacity = occupantsPerRoom * numberOfRooms;
+  
+  // Count existing reservations for this room
+  const roomReservations = reservations.filter(reservation => 
+    reservation.room_uuid === room.uuid || reservation.room === room.uuid
+  );
+  
+  // Calculate available slots using the correct formula:
+  // availableSlots = totalCapacity - (currentOccupants + reservedSlots)
+  const reservedSlots = roomReservations.length;
+  const totalOccupied = currentOccupants + reservedSlots;
+  const availableSlots = totalCapacity - totalOccupied;
+  
+  return {
+    totalCapacity,
+    currentOccupants,
+    reservedSlots,
+    availableSlots,
+    isAvailable: availableSlots > 0,
+    occupancyRate: totalCapacity > 0 ? (totalOccupied / totalCapacity) * 100 : 0
+  };
+};
+
+/**
  * Determines the availability status of a specific room
  * @param {Object} room - The room object
  * @param {Object} hostel - The parent hostel object
+ * @param {Array} reservations - Array of existing reservations (optional)
  * @returns {Object} - Room availability status
  */
-export const getRoomAvailabilityStatus = (room, hostel) => {
+export const getRoomAvailabilityStatus = (room, hostel, reservations = []) => {
+  // Handle null or undefined room
+  if (!room) {
+    return {
+      type: 'not_available',
+      message: 'Room Not Found',
+      isAvailable: false,
+      icon: 'ban'
+    };
+  }
+
   // If hostel is under service, room is not available
   if (hostel.is_available === false || hostel.status !== 'Available') {
     return {
@@ -82,22 +141,27 @@ export const getRoomAvailabilityStatus = (room, hostel) => {
     };
   }
 
-  // Check room-specific availability
-  const isRoomAvailable = Boolean(room.room_available);
+  // If hostel doesn't accept bookings, room is still available for reservations
+  // (This check is removed to allow reservations even when bookings are disabled)
+
+  // Calculate room availability based on reservation slots
+  const availability = calculateRoomAvailability(room, reservations);
   
-  if (isRoomAvailable) {
+  if (availability.isAvailable) {
     return {
       type: 'available',
-      message: 'Available',
+      message: `${availability.availableSlots} Slot${availability.availableSlots > 1 ? 's' : ''} Available`,
       isAvailable: true,
-      icon: 'check'
+      icon: 'check',
+      availability: availability
     };
   } else {
     return {
       type: 'not_available',
-      message: 'Not Available',
+      message: 'Fully Booked',
       isAvailable: false,
-      icon: 'ban'
+      icon: 'ban',
+      availability: availability
     };
   }
 };

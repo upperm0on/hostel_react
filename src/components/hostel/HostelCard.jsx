@@ -4,14 +4,18 @@ import DetailPopup from "./DetailPopup";
 import SimpleReservationModal from "../reservation/SimpleReservationModal";
 import ReviewsModal from "../dashboard/ReviewsModal";
 import { buildMediaUrl } from "../../config/api";
-import { Star, Users, MapPin, Eye, AlertTriangle, Wrench, CheckCircle, Ban, HelpCircle, MessageSquare } from "lucide-react";
+import { Star, Users, MapPin, Eye, AlertTriangle, Wrench, CheckCircle, Ban, HelpCircle, MessageSquare, Calendar } from "lucide-react";
 import { getHostelAvailabilityStatus, getAvailabilityIcon } from "../../utils/availabilityUtils";
+import { useReservationData } from "../../hooks/useReservationData";
 
 function HostelCard({ hostel }) {
   const [open, setOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  
+  // Get reservation data for availability calculation
+  const { hasReservation, allReservations } = useReservationData();
 
   // Make sure room_details exists and is an array
   const normalizeRooms = (value) => {
@@ -104,15 +108,8 @@ function HostelCard({ hostel }) {
           />
           <div className="card-overlay">
             {!availabilityStatus.isAvailable && (
-              <div className={`availability_badge ${availabilityStatus.type}`} aria-label={`Hostel ${availabilityStatus.message.toLowerCase()}`}>
-                <AvailabilityIcon size={16} className="availability_icon" />
-                <span className="availability_text">{availabilityStatus.message}</span>
-              </div>
-            )}
-            {hostel?.accepts_bookings === false && (
-              <div className="booking_disabled_badge" aria-label="Online booking disabled">
-                <Ban size={16} className="booking_disabled_icon" />
-                <span className="booking_disabled_text">Booking Disabled</span>
+              <div className={`availability_badge ${availabilityStatus.type} icon-only`} aria-label={`Hostel ${availabilityStatus.message.toLowerCase()}`} title={availabilityStatus.message}>
+                <AvailabilityIcon size={20} className="availability_icon" />
               </div>
             )}
             <div style={{display:'flex', justifyContent:'center', width:'100%'}}>
@@ -164,6 +161,23 @@ function HostelCard({ hostel }) {
               )}
             </div>
           </div>
+          
+          {/* Reserve button for hostels that don't accept bookings */}
+          {hostel?.accepts_bookings === false && availabilityStatus.isAvailable && (
+            <div className="hostel_reserve_section">
+              <button 
+                className="hostel_reserve_btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleReservationClick(room_details);
+                }}
+                title="Reserve this hostel (no online booking available)"
+              >
+                <Calendar size={16} />
+                <span>Reserve</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

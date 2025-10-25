@@ -4,8 +4,12 @@ import DetailRoom from "./DetailRoom";
 import { X, Star, MapPin, Wifi, Car, Shield, Utensils, Dumbbell, Users, Phone, Mail } from "lucide-react";
 import { buildMediaUrl } from "../../config/api";
 import { getHostelAvailabilityStatus } from "../../utils/availabilityUtils";
+import { useReservationData } from "../../hooks/useReservationData";
 
 function DetailPopup({ hostel, open, onClose, onReservationClick }) {
+  // Get reservation data for availability calculation
+  const { allReservations } = useReservationData();
+  
   // Close on ESC
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -21,6 +25,7 @@ function DetailPopup({ hostel, open, onClose, onReservationClick }) {
     : (typeof hostel.room_details === 'string'
         ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
         : []);
+  
 
   // Safely parse additional details - could be JSON array or comma-separated string
   const additional_details = (() => {
@@ -129,6 +134,7 @@ function DetailPopup({ hostel, open, onClose, onReservationClick }) {
                     room_details={detail} 
                     hostel={hostel}
                     onReservationClick={onReservationClick}
+                    allReservations={allReservations || []}
                   />
                 ))}
               </div>

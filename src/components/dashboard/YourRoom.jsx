@@ -1,10 +1,12 @@
 import RoomCard from "./RoomCard";
 import { Home, Circle } from 'lucide-react';
 import "../../assets/css/dashboard/YourRoom.css";
+import { useHostelData } from '../../hooks/useHostelData';
+import { useReservationData } from '../../hooks/useReservationData';
 
 function YourRoom() {
-  const hostel = JSON.parse(localStorage.getItem("information"));
-  const bookedRoom = localStorage.getItem("room_booked");
+  const { hostel } = useHostelData();
+  const { roomBooked } = useReservationData();
 
   // Parse room details properly
   const room_details_parsed = Array.isArray(hostel.room_details)
@@ -13,7 +15,7 @@ function YourRoom() {
         ? (() => { try { return JSON.parse(hostel.room_details || '[]'); } catch { return []; } })()
         : []);
 
-  const cleanedBookedRoom = bookedRoom.replace(/"/g, ""); // removes extra quotes
+  const cleanedBookedRoom = roomBooked ? roomBooked.replace(/"/g, "") : ""; // removes extra quotes
 
   let passing_room = null;
 

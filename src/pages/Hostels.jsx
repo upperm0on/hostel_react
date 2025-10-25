@@ -10,10 +10,15 @@ import { SITE_URL } from "../config/site";
 import { buildApiUrl, API_ENDPOINTS } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import { checkResponseForUnverifiedAccount, handleUnverifiedAccount } from "../utils/authUtils";
+import { useDispatch } from "react-redux";
+import { fetchAllReservations } from "../store/thunks/hostelThunks";
+import { useAuthData } from "../hooks/useAuthData";
 
 function Hostels() {
     const [q, setQ] = useState("");
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { token, isAuthenticated } = useAuthData();
 
     const [hostelsData, setHostelsData] = useState(() => {
         try { 
@@ -74,11 +79,13 @@ function Hostels() {
 
     // Always request hostels data when visiting this page and cache to localStorage
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const email = localStorage.getItem('email');
 
         // If there's no token, show a simple login prompt UI (we still allow viewing landing/signup elsewhere)
-        if (!token) return;
+        if (!token || !isAuthenticated) return;
+
+        // Fetch all reservations for availability calculation
+        dispatch(fetchAllReservations());
 
         let cancelled = false;
 
@@ -125,7 +132,7 @@ function Hostels() {
         fetchHostels();
 
         return () => { cancelled = true; };
-    }, [navigate]);
+    }, [navigate, token, isAuthenticated]);
 
     // Auto-fetch when hostelsData is empty (after cache clear)
     useEffect(() => {
@@ -186,7 +193,7 @@ function Hostels() {
             <NavBar />
             <div className="hostels_main_container" style={{paddingTop: 90}}>
                 {/* If user is not logged in, show prompt to login to access hostels */}
-                {!localStorage.getItem('token') ? (
+                {!token || !isAuthenticated ? (
                     <div style={{textAlign: 'center', padding: '80px 16px'}}>
                         <h2 style={{fontSize: '1.5rem', marginBottom: 8}}>Please log in to browse hostels</h2>
                         <p style={{color: 'var(--color-muted-text)', marginBottom: 20}}>You need to be signed in to access detailed hostel listings. Create an account or log in to continue.</p>

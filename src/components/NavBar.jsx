@@ -4,6 +4,9 @@ import { Building2, User, Menu, X, LogOut } from "lucide-react";
 import "../assets/css/NavBar.css";
 import LogoutConfirm from "./LogoutConf";
 import { } from "react-router-dom";
+import { withFeatureSafety, isFeatureEnabled } from "../config/features";
+import NotificationCenter from "./enhanced/notifications/NotificationCenter";
+import FeatureErrorBoundary from "./common/FeatureErrorBoundary";
 
 function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -64,6 +67,12 @@ function NavBar() {
 
             {token ? (
               <div className="buttons_united">
+                {/* Notification Center - Safely integrated */}
+                <FeatureErrorBoundary>
+                  {withFeatureSafety('NOTIFICATIONS', NotificationCenter)()}
+                </FeatureErrorBoundary>
+                
+                
                 <div className="nav-links-item">
                   <Link to="/dashboard" className="nav-link">
                     <div className="button_img">

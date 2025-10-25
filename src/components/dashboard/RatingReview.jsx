@@ -12,6 +12,10 @@ const RatingReview = ({ hostelId }) => {
   const [showReviews, setShowReviews] = useState(false);
 
   const token = localStorage.getItem('token');
+  
+  // Debug logging
+  console.log('RatingReview - hostelId:', hostelId);
+  console.log('RatingReview - token:', token);
 
   // Fetch existing reviews
   const fetchReviews = async () => {
@@ -111,6 +115,7 @@ const RatingReview = ({ hostelId }) => {
   // Load reviews on component mount
   useEffect(() => {
     if (hostelId) {
+      console.log('RatingReview - fetching reviews for hostelId:', hostelId);
       fetchReviews();
     }
   }, [hostelId]);

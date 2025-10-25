@@ -156,6 +156,29 @@
     text-transform: uppercase;
 }
 
+/* Icon-only badges */
+.availability_badge.icon-only {
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+}
+
+.booking_disabled_badge.icon-only {
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+}
+
 .hostel_card.not-available .card-img-container img {
     filter: grayscale(0.35) brightness(0.9);
 }
@@ -353,6 +376,50 @@
     box-shadow: none;
 }
 
+/* Reserve button for hostels that don't accept bookings */
+.hostel_reserve_section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(15,23,42,0.06);
+}
+
+.hostel_reserve_btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    width: 100%;
+    justify-content: center;
+}
+
+.hostel_reserve_btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+}
+
+.hostel_reserve_btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.hostel_reserve_btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 /* Responsive design for reviews button */
 @media (max-width: 768px) {
     .hostel_actions {
@@ -363,6 +430,11 @@
     .reviews-btn {
         font-size: 0.7rem;
         padding: 3px 6px;
+    }
+    
+    .hostel_reserve_btn {
+        font-size: 0.85rem;
+        padding: 8px 14px;
     }
 }
 

@@ -3,9 +3,10 @@ import RoomCard from "./RoomCard";
 import { Building2, BarChart3, Users, MapPin, Sparkles, Star } from "lucide-react";
 import "../../assets/css/dashboard/HostelCard.css";
 import { buildMediaUrl } from "../../config/api";
+import { useHostelData } from "../../hooks/useHostelData";
 
 function HostelCard() {
-  const hostel = JSON.parse(localStorage.getItem("information") || "{}");
+  const { hostel } = useHostelData();
   const additionalDetails = Array.isArray(hostel?.additional_details)
     ? hostel.additional_details
     : [];
@@ -56,7 +57,7 @@ function HostelCard() {
         />
         <div className="hostel_location">
           <MapPin size={16} />
-          {hostel?.campus?.campus || "Unknown Campus"}
+          {hostel?.campus?.campus || hostel?.campus || hostel?.location || "Campus Information"}
         </div>
       </div>
 

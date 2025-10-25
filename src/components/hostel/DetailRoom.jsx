@@ -2,6 +2,7 @@ import "../../assets/css/hostel/DetailRoom.css";
 import { buildApiUrl, API_ENDPOINTS } from "../../config/api";
 import { Users, DollarSign, Bed, Wifi, Car, Shield, Utensils, Dumbbell, CheckCircle, CreditCard, Ban, Wrench, CalendarCheck, RotateCcw } from "lucide-react";
 import { getRoomAvailabilityStatus } from "../../utils/availabilityUtils";
+import { useReservationData } from "../../hooks/useReservationData";
 
 // Helper to slugify hostel names for path segments
 const slugify = (str) =>
@@ -12,12 +13,11 @@ const slugify = (str) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-function DetailRoom({ room_details, hostel, onReservationClick }) {
-  // Check if user has an existing reservation
-  const hasExistingReservation = () => {
-    const reservationData = localStorage.getItem("reservation_data");
-    return reservationData && reservationData !== "null" && reservationData !== "{}";
-  };
+function DetailRoom({ room_details, hostel, onReservationClick, allReservations: propReservations }) {
+  // Check if user has an existing reservation using Redux
+  const { hasReservation, allReservations: hookReservations } = useReservationData();
+  const allReservations = propReservations || hookReservations || [];
+  const hasExistingReservation = () => hasReservation;
   // Safely parse amenities - could be JSON array or comma-separated string
   const amenities = (() => {
     try {
@@ -41,8 +41,8 @@ function DetailRoom({ room_details, hostel, onReservationClick }) {
 
   const genderKeys = Object.keys(room_details.gender);
 
-  // Get room availability status
-  const roomAvailabilityStatus = getRoomAvailabilityStatus(room_details, hostel);
+  // Get room availability status with reservations data
+  const roomAvailabilityStatus = getRoomAvailabilityStatus(room_details, hostel, allReservations);
   const isRoomAvailable = roomAvailabilityStatus.isAvailable;
 
   const hostelSlug = slugify(hostel?.name);
@@ -181,7 +181,7 @@ function DetailRoom({ room_details, hostel, onReservationClick }) {
         </div>
 
         <div className="room-action-buttons">
-          {/* Only show Book Now button if hostel accepts bookings */}
+          {/* Book Now button - only show if hostel accepts bookings */}
           {hostel?.accepts_bookings !== false && (
             <button
               type="button"
@@ -196,26 +196,40 @@ function DetailRoom({ room_details, hostel, onReservationClick }) {
             </button>
           )}
           
-          {hostel?.accepts_bookings !== false && (
-            <button
-              type="button"
-              className={`reserve-room-btn ${hasExistingReservation() ? 'change-reservation' : ''}`}
-              onClick={() => onReservationClick && onReservationClick(room_details)}
-              disabled={!isRoomAvailable}
-              aria-disabled={!isRoomAvailable}
-              title={isRoomAvailable ? (hasExistingReservation() ? "Change your reservation (no refund)" : "Reserve this room with deposit") : `Room ${roomAvailabilityStatus.message.toLowerCase()}`}
-            >
-              {isRoomAvailable ? (hasExistingReservation() ? <RotateCcw size={18} /> : <CalendarCheck size={18} />) : (roomAvailabilityStatus.type === 'under_service' ? <Wrench size={18} /> : <Ban size={18} />)}
-              <span>{isRoomAvailable ? (hasExistingReservation() ? "Change Reservation" : "Reserve Room") : roomAvailabilityStatus.message}</span>
-            </button>
-          )}
-          
-          {hostel?.accepts_bookings === false && (
-            <div className="booking-disabled-notice">
-              <Ban size={18} />
-              <span>Online booking is currently disabled for this hostel</span>
-            </div>
-          )}
+          {/* Reserve button - always functional for reservations */}
+          <button
+            type="button"
+            className={`reserve-room-btn ${hasExistingReservation() ? 'change-reservation' : ''}`}
+            onClick={() => {
+              console.log('Reserve button clicked:', { 
+                accepts_bookings: hostel?.accepts_bookings, 
+                onReservationClick: !!onReservationClick,
+                room_details 
+              });
+              if (onReservationClick) {
+                onReservationClick(room_details);
+              }
+            }}
+            disabled={!isRoomAvailable}
+            aria-disabled={!isRoomAvailable}
+            title={
+              isRoomAvailable 
+                ? (hasExistingReservation() ? "Change your reservation (no refund)" : "Reserve this room with deposit") 
+                : `Room ${roomAvailabilityStatus.message.toLowerCase()}`
+            }
+          >
+            {isRoomAvailable ? (
+              hasExistingReservation() ? <RotateCcw size={18} /> : <CalendarCheck size={18} />
+            ) : (
+              roomAvailabilityStatus.type === 'under_service' ? <Wrench size={18} /> : <Ban size={18} />
+            )}
+            <span>
+              {isRoomAvailable 
+                ? (hasExistingReservation() ? "Change Reservation" : "Reserve Room") 
+                : roomAvailabilityStatus.message
+              }
+            </span>
+          </button>
         </div>
       </div>
     </div>
